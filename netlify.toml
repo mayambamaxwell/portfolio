@@ -46,7 +46,7 @@ Subject: {{subject}}
 
 ───────────────────────────────
 Submitted: {{created_at}}
-View in Netlify dashboard: https://app.netlify.com/sites/YOUR_SITE_NAME/forms
+View in Netlify dashboard: https://app.netlify.com/sites/mayambamaxwell.com/forms
 """
 
 # 2) Auto-reply TO THE SENDER

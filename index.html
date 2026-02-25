@@ -7,7 +7,6 @@
   <title>Mayamba Maxwell | Portfolio</title>
   <link rel="icon" type="image/png" href="/Assets/titleImage.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
@@ -117,30 +116,8 @@
     .hero-socials { display: flex; gap: 20px; animation: fadeInUp 0.7s 0.45s ease both; }
     .hero-socials a { color: var(--muted); transition: color 0.2s, transform 0.2s; display: flex; align-items: center; }
     .hero-socials a:hover { color: var(--green); transform: translateY(-2px); }
-    .hero-image {
-      position: absolute;
-      right: -5vw;
-      bottom: -2vh;
-      width: clamp(580px, 46vw, 1000px);
-      max-width: 1100px;
-      z-index: 1;
-      pointer-events: none;
-      transform: translateZ(0);
-    }
-    .hero-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-      transform-origin: center right;
-    }
-
-    @media (max-width: 1100px) {
-      .hero-image { width: clamp(420px, 55vw, 700px); right: -3vw; bottom: -1vh; }
-    }
-    @media (max-width: 768px) {
-      .hero-image { display: none; }
-    }
+    .hero-image { position: absolute; right: 0; bottom: 0; width: 580px; z-index: 1; pointer-events: none; }
+    .hero-image img { width: 100%; display: block; }
 
     /* ─── SECTIONS ─── */
     section { padding: 80px; }
@@ -246,7 +223,7 @@
       header { padding: 0 40px; }
       section, #portfolio, #shop, #contact, #support, footer { padding: 60px 40px; }
       .shop-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-image { width: clamp(420px, 55vw, 700px); right: -3vw; bottom: -1vh; }
+      .hero-image { width: 360px; }
     }
     @media (max-width: 768px) {
       header { padding: 0 20px; }
@@ -410,11 +387,46 @@
           <span>Gombe, Nigeria</span>
         </div>
       </div>
-      <form onsubmit="handleContactSubmit(event)">
-        <div class="form-group"><input type="text" placeholder="Your Name" required /></div>
-        <div class="form-group"><input type="email" placeholder="Your Email" required /></div>
-        <div class="form-group"><textarea placeholder="Your Message" required></textarea></div>
-        <button type="submit" class="btn-send">SEND MESSAGE</button>
+
+      <!--
+        NETLIFY FORM — DO NOT REMOVE any of the data-netlify attributes.
+        Submissions → your Netlify dashboard → Forms → "contact"
+        Email notifications → Site settings → Forms → Form notifications
+        Auto-reply configured in netlify.toml
+      -->
+      <form
+        id="contactForm"
+        name="contact"
+        method="POST"
+        action="/success.html"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+        onsubmit="handleContactSubmit(event)"
+      >
+        <!-- Required hidden fields for Netlify -->
+        <input type="hidden" name="form-name" value="contact" />
+
+        <!-- Honeypot spam trap — hidden from real users -->
+        <p style="display:none">
+          <label>Don't fill this out: <input name="bot-field" /></label>
+        </p>
+
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Your Name" required autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Your Email" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <input type="text" name="subject" placeholder="Subject (e.g. Commission Request)" />
+        </div>
+        <div class="form-group">
+          <textarea name="message" placeholder="Your Message" required></textarea>
+        </div>
+        <button type="submit" class="btn-send" id="contactSubmitBtn">SEND MESSAGE</button>
+
+        <!-- Inline success/error feedback -->
+        <div id="formFeedback" style="display:none; margin-top:16px; padding:14px 18px; border-radius:10px; font-size:14px; letter-spacing:0.5px;"></div>
       </form>
     </div>
   </section>
@@ -434,7 +446,7 @@
     <p class="footer-copy">© 2025 Mayamba Maxwell. All rights reserved. &nbsp;|&nbsp; <a href="mailto:mayambamaxwell@gmail.com">mayambamaxwell@gmail.com</a></p>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ── Cart state (shared via localStorage with shop.html) ──
     let cart = JSON.parse(localStorage.getItem('mm_cart') || '[]');
 
@@ -484,13 +496,53 @@
       navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--green)' : ''; });
     });
 
-    // ── Contact form ──
+    // ── Contact form — real Netlify AJAX submission ──
     function handleContactSubmit(e) {
       e.preventDefault();
-      const btn = e.target.querySelector('.btn-send');
-      btn.textContent = 'MESSAGE SENT ✓';
-      btn.style.background = '#3a5a3a';
-      setTimeout(() => { btn.textContent = 'SEND MESSAGE'; btn.style.background = ''; e.target.reset(); }, 3000);
+      const form     = e.target;
+      const btn      = document.getElementById('contactSubmitBtn');
+      const feedback = document.getElementById('formFeedback');
+
+      // Loading state
+      btn.textContent = 'SENDING...';
+      btn.disabled    = true;
+      feedback.style.display = 'none';
+
+      fetch('/', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body:    new URLSearchParams(new FormData(form)).toString()
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Network error');
+
+        // Success
+        btn.textContent       = 'MESSAGE SENT ✓';
+        btn.style.background  = '#3a5a3a';
+        feedback.style.display     = 'block';
+        feedback.style.background  = 'rgba(58,90,58,0.25)';
+        feedback.style.border      = '1px solid rgba(105,153,102,0.4)';
+        feedback.style.color       = '#a8d5a2';
+        feedback.innerHTML = '✓ &nbsp; Thanks for reaching out! I\'ll reply within 24–48 hours. A confirmation email is on its way to you.';
+        form.reset();
+
+        setTimeout(() => {
+          btn.textContent      = 'SEND MESSAGE';
+          btn.style.background = '';
+          btn.disabled         = false;
+          feedback.style.display = 'none';
+        }, 6000);
+      })
+      .catch(() => {
+        // Error
+        btn.textContent      = 'SEND MESSAGE';
+        btn.disabled         = false;
+        feedback.style.display    = 'block';
+        feedback.style.background = 'rgba(139,32,32,0.2)';
+        feedback.style.border     = '1px solid rgba(220,80,80,0.3)';
+        feedback.style.color      = '#f08080';
+        feedback.innerHTML = '✕ &nbsp; Something went wrong. Email me directly at <a href="mailto:mayambamaxwell@gmail.com" style="color:inherit;text-decoration:underline">mayambamaxwell@gmail.com</a>';
+      });
     }
   </script>
 </body>

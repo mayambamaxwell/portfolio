@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Message Sent | Mayamba Maxwell</title>
+  <link rel="icon" type="image/png" href="/Assets/titleImage.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --green: #699966; --bg: #1c1c1c; --text: #d1d5db; --white: #fff; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Anton', sans-serif;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 40px 20px;
+    }
+    .card {
+      text-align: center; max-width: 520px; width: 100%;
+      background: rgba(58,90,58,0.12);
+      border: 1px solid rgba(105,153,102,0.25);
+      border-radius: 20px; padding: 60px 48px;
+      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn { from { opacity:0; transform:scale(0.88); } to { opacity:1; transform:scale(1); } }
+
+    .checkmark {
+      width: 72px; height: 72px;
+      background: rgba(105,153,102,0.15);
+      border: 2px solid var(--green);
+      border-radius: 50%; margin: 0 auto 28px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .checkmark svg { color: var(--green); }
+
+    h1 { font-size: 36px; color: var(--white); letter-spacing: 1px; margin-bottom: 16px; }
+    p  { font-size: 16px; line-height: 1.7; color: var(--text); margin-bottom: 32px; }
+    p strong { color: var(--green); }
+
+    .btn {
+      display: inline-block; background: var(--green); color: var(--white);
+      padding: 14px 32px; border-radius: 12px; text-decoration: none;
+      font-size: 15px; letter-spacing: 0.5px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* auto-redirect countdown */
+    .countdown { margin-top: 20px; font-size: 13px; color: #6b7280; letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="checkmark">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h1>MESSAGE SENT!</h1>
+    <p>
+      Thanks for reaching out — I've received your message and will get back to you within
+      <strong>24–48 hours</strong>.<br/><br/>
+      Check your inbox — a confirmation email should be on its way to you.
+    </p>
+    <a href="index.html" class="btn">← BACK TO HOME</a>
+    <p class="countdown" id="countdown">Redirecting in 8 seconds…</p>
+  </div>
+
+  <script>
+    // Auto-redirect after 8 seconds
+    let secs = 8;
+    const el = document.getElementById('countdown');
+    const timer = setInterval(() => {
+      secs--;
+      el.textContent = `Redirecting in ${secs} second${secs !== 1 ? 's' : ''}…`;
+      if (secs <= 0) { clearInterval(timer); window.location.href = 'index.html'; }
+    }, 1000);
+  </script>
+</body>
+</html>

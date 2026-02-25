@@ -1,0 +1,154 @@
+# ─────────────────────────────────────────────
+#  netlify.toml  —  Mayamba Maxwell Portfolio
+#  Place this file in the ROOT of your project
+# ─────────────────────────────────────────────
+
+# ── Build settings (adjust if you have a build step) ──
+[build]
+  publish = "."        # folder to deploy (change to "dist" or "out" if you use a bundler)
+  command = ""         # leave empty for plain HTML sites
+
+# ── Redirect: send form submissions to success page as fallback ──
+[[redirects]]
+  from   = "/success"
+  to     = "/success.html"
+  status = 200
+
+# ══════════════════════════════════════════════════════
+#  CONTACT FORM NOTIFICATIONS
+#  These fire every time the "contact" form is submitted
+# ══════════════════════════════════════════════════════
+
+# 1) Email YOU the submission
+[[notifications]]
+  event  = "submission_created"
+  form   = "contact"
+  type   = "email"
+
+  [notifications.data]
+    to       = "mmaxwell567@gmail.com"
+    from     = "noreply@mayambamaxwell.netlify.app"
+    reply_to = "mayambamaxwell@gmail.com"
+    subject  = "New Contact Message from {{name}} — Mayamba Maxwell"
+    # Full message body you receive:
+    body    = """
+Hi Mayamba,
+
+You have a new message from your portfolio contact form.
+
+───────────────────────────────
+Name:    {{name}}
+Email:   {{email}}
+Subject: {{subject}}
+───────────────────────────────
+
+{{message}}
+
+───────────────────────────────
+Submitted: {{created_at}}
+View in Netlify dashboard: https://app.netlify.com/sites/YOUR_SITE_NAME/forms
+"""
+
+# 2) Auto-reply TO THE SENDER
+[[notifications]]
+  event  = "submission_created"
+  form   = "contact"
+  type   = "email"
+
+  [notifications.data]
+    # "to" uses the email field the visitor filled in
+    to      = "{{email}}"
+    from    = "Mayamba Maxwell <noreply@mayambamaxwell.netlify.app>"
+    subject = "Got your message, {{name}}! — Mayamba Maxwell"
+    body    = """
+Hi {{name}},
+
+Thanks for reaching out — your message landed safely in my inbox!
+
+I read every message personally and usually reply within 24–48 hours.
+If it's urgent, you can also reach me directly on Telegram: https://t.me/Max_Designr
+
+Here's a copy of what you sent:
+───────────────────────────────
+Subject: {{subject}}
+
+{{message}}
+───────────────────────────────
+
+Talk soon,
+Mayamba Maxwell
+UI/UX Designer • Game Dev • Animator
+🌐 https://mayambamaxwell.netlify.app
+🐦 https://x.com/_mayamba
+🎨 https://www.behance.net/mayambamaxwell
+"""
+
+# ══════════════════════════════════════════════════════
+#  COMMISSION FORM NOTIFICATIONS
+# ══════════════════════════════════════════════════════
+
+# 1) Email YOU the commission request
+[[notifications]]
+  event  = "submission_created"
+  form   = "commission"
+  type   = "email"
+
+  [notifications.data]
+    to       = "mmaxwell567@gmail.com"
+    from     = "noreply@mayambamaxwell.netlify.app"
+    reply_to = "mayambamaxwell@gmail.com"
+    subject  = "New Commission Request from {{name}} — Mayamba Maxwell"
+    body    = """
+Hi Mayamba,
+
+You have a new commission request!
+
+───────────────────────────────
+Name:  {{name}}
+Email: {{email}}
+───────────────────────────────
+
+Project Details:
+{{details}}
+
+───────────────────────────────
+Submitted: {{created_at}}
+"""
+
+# 2) Auto-reply for commission requests
+[[notifications]]
+  event  = "submission_created"
+  form   = "commission"
+  type   = "email"
+
+  [notifications.data]
+    to      = "{{email}}"
+    from    = "Mayamba Maxwell <noreply@mayambamaxwell.netlify.app>"
+    subject = "Commission Request Received — Mayamba Maxwell"
+    body    = """
+Hi {{name}},
+
+Thanks for your commission request! I've received your project details and will review them carefully.
+
+I typically respond to commission inquiries within 48 hours with availability, timeline, and pricing.
+
+Here's what you submitted:
+───────────────────────────────
+{{details}}
+───────────────────────────────
+
+Looking forward to working with you!
+
+Mayamba Maxwell
+UI/UX Designer • Game Dev • Animator
+🌐 https://mayambamaxwell.netlify.app
+"""
+
+# ── Security headers (good practice) ──
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-XSS-Protection       = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"

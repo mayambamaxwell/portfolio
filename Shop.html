@@ -3,70 +3,722 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="p:domain_verify" content="4c73458ccf2d01d0597763812babbe4d"/>
   <title>Shop | Mayamba Maxwell</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="/Assets/titleImage.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-METVLYPXSK');
+  </script>
 
-  gtag('config', 'G-METVLYPXSK');
-</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #699966;
+      --green-light: rgba(105,153,102,0.2);
+      --green-dark: rgba(58,90,58,0.3);
+      --bg: #1c1c1c;
+      --card: #222;
+      --text: #d1d5db;
+      --muted: #9ca3af;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Anton', sans-serif; overflow-x: hidden; }
+
+    /* ─── NAV ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      height: 65px;
+      background: rgba(28,28,28,0.92);
+      border-bottom: 1px solid rgba(58,90,58,0.25);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; padding: 0 60px;
+    }
+    nav { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .logo { color: var(--green); font-size: 20px; letter-spacing: 1px; text-decoration: none; white-space: nowrap; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--white); text-decoration: none; font-size: 14px; letter-spacing: 0.5px; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    .nav-links .btn-contact {
+      background: var(--green); color: var(--white); padding: 6px 18px;
+      border-radius: 5px; font-size: 14px; text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-links .btn-contact:hover { opacity: 0.85; }
+
+    /* Cart button */
+    .cart-btn {
+      position: relative; cursor: pointer; color: var(--white);
+      display: flex; align-items: center; gap: 7px;
+      background: none; border: 1px solid rgba(105,153,102,0.35); padding: 6px 14px;
+      border-radius: 8px; font-family: 'Anton', sans-serif; font-size: 14px;
+      letter-spacing: 0.5px; transition: all 0.2s; text-decoration: none;
+    }
+    .cart-btn:hover { border-color: var(--green); color: var(--green); }
+    .cart-badge {
+      position: absolute; top: -8px; right: -8px;
+      background: var(--green); color: #fff; font-size: 10px;
+      min-width: 18px; height: 18px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; padding: 0 4px;
+      opacity: 0; transform: scale(0);
+      transition: opacity 0.2s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── PAGE HERO ─── */
+    .page-hero {
+      padding: 120px 60px 32px; text-align: center;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(105,153,102,0.07) 0%, transparent 70%);
+    }
+    .page-hero h1 { font-size: clamp(40px, 6vw, 72px); color: var(--green); letter-spacing: 2px; margin-bottom: 10px; }
+    .page-hero p  { color: var(--muted); font-size: 15px; letter-spacing: 1px; margin-bottom: 4px; }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      display: flex; justify-content: center; align-items: center;
+      gap: 10px; padding: 32px 60px 40px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: transparent; border: 1px solid rgba(105,153,102,0.25);
+      color: var(--muted); padding: 8px 22px; border-radius: 100px;
+      font-family: 'Anton', sans-serif; font-size: 13px; letter-spacing: 1px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--green); border-color: var(--green); color: var(--white);
+    }
+
+    /* ─── PRODUCT GRID ─── */
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 0 60px 80px;
+    }
+
+    .product-card {
+      background: var(--card);
+      border: 1px solid rgba(58,90,58,0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+      border-color: rgba(105,153,102,0.4);
+    }
+    .product-card.hidden { display: none; }
+
+    /* Sale ribbon */
+    .ribbon {
+      position: absolute; top: 14px; left: -1px;
+      background: #c0392b; color: #fff; font-size: 11px;
+      letter-spacing: 1px; padding: 4px 10px;
+      border-radius: 0 6px 6px 0; z-index: 2;
+    }
+    .ribbon.digital { background: var(--green); }
+
+    .product-img {
+      width: 100%; aspect-ratio: 1;
+      overflow: hidden; background: rgba(74,102,74,0.2);
+      position: relative;
+    }
+    .product-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-img img { transform: scale(1.05); }
+
+    /* quick-add overlay on image */
+    .quick-add {
+      position: absolute; inset: 0;
+      background: rgba(18,28,18,0.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .product-card:hover .quick-add { opacity: 1; }
+    .quick-add-btn {
+      background: var(--green); color: #fff; border: none;
+      padding: 10px 22px; border-radius: 8px;
+      font-family: 'Anton', sans-serif; font-size: 14px; letter-spacing: 0.5px;
+      cursor: pointer; transform: translateY(8px); transition: transform 0.25s;
+    }
+    .product-card:hover .quick-add-btn { transform: translateY(0); }
+    .quick-add-btn:hover { filter: brightness(1.1); }
+
+    .product-body { padding: 16px; }
+    .product-body h3 { font-size: 16px; color: var(--white); margin-bottom: 6px; line-height: 1.2; }
+    .product-body .pdesc { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .price-wrap { display: flex; align-items: baseline; gap: 8px; }
+    .price { color: var(--green); font-size: 20px; }
+    .price-original { color: var(--muted); font-size: 13px; text-decoration: line-through; }
+    .add-btn {
+      background: var(--green-light); color: var(--white); border: 1px solid rgba(105,153,102,0.4);
+      padding: 7px 14px; border-radius: 8px; font-family: 'Anton', sans-serif;
+      font-size: 12px; cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .add-btn:hover { background: var(--green); border-color: var(--green); }
+    .add-btn.added { background: #3a5a3a; border-color: #3a5a3a; }
+
+    /* sold out state */
+    .product-card.sold-out .product-img { filter: grayscale(0.4) brightness(0.7); }
+    .product-card.sold-out .quick-add-btn { background: #555; cursor: not-allowed; }
+    .sold-out-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(0,0,0,0.7); color: var(--muted);
+      font-size: 11px; letter-spacing: 1px; padding: 4px 10px; border-radius: 6px;
+    }
+
+    /* ─── CART DRAWER ─── */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      z-index: 400; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(420px, 100vw);
+      background: #1a1f1a;
+      border-left: 1px solid rgba(58,90,58,0.3);
+      z-index: 500;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      padding: 24px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(58,90,58,0.25);
+    }
+    .drawer-header h2 { font-size: 20px; color: var(--white); letter-spacing: 1px; }
+    .drawer-close {
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 22px; line-height: 1; transition: color 0.2s; padding: 4px;
+    }
+    .drawer-close:hover { color: var(--white); }
+
+    .drawer-items { flex: 1; overflow-y: auto; padding: 16px; }
+    .drawer-items::-webkit-scrollbar { width: 4px; }
+    .drawer-items::-webkit-scrollbar-track { background: transparent; }
+    .drawer-items::-webkit-scrollbar-thumb { background: rgba(105,153,102,0.3); border-radius: 2px; }
+
+    .cart-empty {
+      text-align: center; padding: 60px 20px;
+      color: var(--muted); font-size: 16px; letter-spacing: 0.5px;
+    }
+    .cart-empty svg { margin-bottom: 16px; opacity: 0.3; }
+
+    .cart-item {
+      display: flex; gap: 14px; align-items: center;
+      padding: 14px 0; border-bottom: 1px solid rgba(58,90,58,0.15);
+      animation: slideIn 0.25s ease both;
+    }
+    @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+
+    .cart-item-img {
+      width: 64px; height: 64px; border-radius: 8px;
+      overflow: hidden; flex-shrink: 0; background: rgba(74,102,74,0.2);
+    }
+    .cart-item-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-info .cname { color: var(--white); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+    .cart-item-info .cprice { color: var(--green); font-size: 15px; }
+
+    .qty-control { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .qty-btn {
+      background: rgba(58,90,58,0.3); border: 1px solid rgba(105,153,102,0.3);
+      color: var(--white); width: 26px; height: 26px; border-radius: 6px;
+      font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; line-height: 1;
+    }
+    .qty-btn:hover { background: var(--green); border-color: var(--green); }
+    .qty-num { font-size: 14px; color: var(--white); min-width: 20px; text-align: center; }
+
+    .cart-remove {
+      background: none; border: none; color: #666; cursor: pointer;
+      font-size: 18px; padding: 4px; transition: color 0.2s; flex-shrink: 0;
+    }
+    .cart-remove:hover { color: #e74c3c; }
+
+    .drawer-footer {
+      padding: 20px 24px; border-top: 1px solid rgba(58,90,58,0.25);
+    }
+    .drawer-subtotal {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .drawer-subtotal span { color: var(--muted); font-size: 14px; letter-spacing: 0.5px; }
+    .drawer-subtotal strong { color: var(--white); font-size: 22px; }
+
+    .checkout-btn {
+      width: 100%; background: var(--green); color: #fff; border: none;
+      padding: 16px; border-radius: 12px; font-family: 'Anton', sans-serif;
+      font-size: 16px; letter-spacing: 1px; cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .checkout-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .paystack-btn {
+      width: 100%; margin-top: 10px; background: #00c3f7; color: #000; border: none;
+      padding: 14px; border-radius: 12px; font-family: 'Anton', sans-serif;
+      font-size: 15px; letter-spacing: 0.5px; cursor: pointer;
+      transition: opacity 0.2s; text-decoration: none; display: block; text-align: center;
+    }
+    .paystack-btn:hover { opacity: 0.88; }
+
+    /* cart bump keyframe */
+    @keyframes cartBump {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.35) rotate(-8deg); }
+      70%  { transform: scale(0.92) rotate(4deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .cart-btn.bump { animation: cartBump 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+    /* flying dot animation */
+    .fly-dot {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--green); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transition: none;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: rgba(58,90,58,0.2); border-top: 1px solid rgba(58,90,58,0.3);
+      padding: 40px 60px;
+    }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .footer-logo { color: var(--green); font-size: 20px; text-decoration: none; }
+    .social-links { display: flex; gap: 20px; }
+    .social-links a { color: var(--muted); transition: color 0.2s, transform 0.2s; display: flex; align-items: center; }
+    .social-links a:hover { color: var(--green); transform: translateY(-2px); }
+    .footer-divider { border: none; border-top: 1px solid rgba(58,90,58,0.2); margin-bottom: 24px; }
+    .footer-copy { text-align: center; color: var(--muted); font-size: 14px; }
+    .footer-copy a { color: var(--green); text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1200px) { .shop-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px)  { .shop-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  {
+      header { padding: 0 20px; }
+      .nav-links { display: none; }
+      .page-hero, .filter-bar { padding-left: 20px; padding-right: 20px; }
+      .shop-grid { grid-template-columns: 1fr; padding: 0 20px 60px; }
+      footer { padding: 32px 20px; }
+      .cart-drawer { width: 100vw; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- ═══ CART OVERLAY ═══ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- ═══ CART DRAWER ═══ -->
+  <div class="cart-drawer" id="cartDrawer" role="dialog" aria-label="Shopping Cart">
+    <div class="drawer-header">
+      <h2>YOUR CART</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">✕</button>
+    </div>
+    <div class="drawer-items" id="drawerItems">
+      <div class="cart-empty" id="cartEmpty">
+        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <p>YOUR CART IS EMPTY</p>
+      </div>
+    </div>
+    <div class="drawer-footer" id="drawerFooter" style="display:none">
+      <div class="drawer-subtotal">
+        <span>SUBTOTAL</span>
+        <strong id="drawerTotal">$0</strong>
+      </div>
+      <button class="checkout-btn" onclick="handleCheckout()">CHECKOUT</button>
+      <a href="https://paystack.shop/pay/mayamba" target="_blank" class="paystack-btn">PAY WITH PAYSTACK</a>
+    </div>
+  </div>
+
+  <!-- ═══ HEADER ═══ -->
   <header>
     <nav>
-      <ul class="navbar">
-        <li><a href="index.html#about">About</a></li>
-        <li><a href="index.html#portfolio">Portfolio</a></li>
-        <li><a href="Shop.html">Shop</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
+      <a href="index.html" class="logo">MAYAMBA MAXWELL</a>
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="portfolio.html">PORTFOLIO</a></li>
+        <li><a href="shop.html" class="active">SHOP</a></li>
+        <li>
+          <button class="cart-btn" id="cartBtn" onclick="openCart()" aria-label="Open cart">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            CART
+            <span class="cart-badge" id="cartBadge">0</span>
+          </button>
+        </li>
+        <li><a href="index.html#contact" class="btn-contact">CONTACT</a></li>
       </ul>
     </nav>
-    <h1>🛒 Shop</h1>
-    <p>Discover and purchase my art!</p>
   </header>
-  <main>
-    <section>
-      <div class="shop-items">
-        <div class="shop-card">
-          <img src="https://via.placeholder.com/200x150?text=Custom+Art" alt="Custom Art">
-          <h3>Custom Art</h3>
-          <p>Order personalized artwork tailored to your ideas.</p>
-          <button>Order Now</button>
-        </div>
-        <div class="shop-card">
-          <img src="https://via.placeholder.com/200x150?text=Art+Prints" alt="Art Prints">
-          <h3>Art Prints</h3>
-          <p>High-quality prints of my original illustrations.</p>
-          <button>Buy Print</button>
-        </div>
-        <div class="shop-card">
-          <img src="https://via.placeholder.com/200x150?text=Digital+Art" alt="Digital Art">
-          <h3>Digital Art</h3>
-          <p>Download exclusive digital artworks for your devices.</p>
-          <button>Download</button>
-        </div>
-        <div class="shop-card">
-          <img src="https://via.placeholder.com/200x150?text=Wallpapers" alt="Wallpapers">
-          <h3>Wallpapers</h3>
-          <p>Stylish wallpapers for desktop and mobile.</p>
-          <button>Get Wallpaper</button>
+
+  <!-- ═══ PAGE HERO ═══ -->
+  <div class="page-hero">
+    <h1>SHOP</h1>
+    <p>UI KITS • ASSETS • COURSES • PRESETS</p>
+  </div>
+
+  <!-- ═══ FILTER BAR ═══ -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="ui-kit">UI KITS</button>
+    <button class="filter-btn" data-filter="assets">ASSETS</button>
+    <button class="filter-btn" data-filter="courses">COURSES</button>
+    <button class="filter-btn" data-filter="presets">PRESETS</button>
+  </div>
+
+  <!-- ═══ PRODUCT GRID ═══ -->
+  <div class="shop-grid" id="shopGrid">
+
+    <!-- Product 1 -->
+    <div class="product-card" data-cat="ui-kit" data-name="UI KIT BUNDLE" data-price="29" data-img="https://www.figma.com/api/mcp/asset/b0110a5b-1789-4ed5-b71c-53a55ba2b90e">
+      <div class="ribbon digital">DIGITAL</div>
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/b0110a5b-1789-4ed5-b71c-53a55ba2b90e" alt="UI Kit Bundle" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>UI KIT BUNDLE</h3>
+        <p class="pdesc">Complete set of UI components for Figma — buttons, cards, forms & more.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$29</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
         </div>
       </div>
-      <button onclick="alert('Crypto payments coming soon!')">💸 Donate with Crypto</button>
-      <a href="https://paystack.com/pay/your-link" target="_blank">
-        <button class="paystack">Pay with Paystack</button>
-      </a>
-    </section>
-  </main>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card" data-cat="presets" data-name="WALLPAPER PACK" data-price="39" data-img="https://www.figma.com/api/mcp/asset/a3e29159-90b6-4fa8-812c-7b403d7bb411">
+      <div class="ribbon">SALE</div>
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/a3e29159-90b6-4fa8-812c-7b403d7bb411" alt="Wallpaper Pack" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>WALLPAPER PACK</h3>
+        <p class="pdesc">Motion graphics presets & animated wallpapers for desktop & mobile.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$39</span><span class="price-original">$55</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card" data-cat="assets" data-name="GAME ASSETS PACK" data-price="19" data-img="https://www.figma.com/api/mcp/asset/5a4be39e-b061-4d95-8e91-08b6f16f774d">
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/5a4be39e-b061-4d95-8e91-08b6f16f774d" alt="Game Assets" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>GAME ASSETS PACK</h3>
+        <p class="pdesc">Hand-crafted 2D character sprites & environment tiles for game devs.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$19</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="product-card" data-cat="courses" data-name="DESIGN COURSE" data-price="99" data-img="https://www.figma.com/api/mcp/asset/88649fab-a63a-4132-b02e-52e1fef18e53">
+      <div class="ribbon digital">COURSE</div>
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/88649fab-a63a-4132-b02e-52e1fef18e53" alt="Design Course" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>DESIGN COURSE</h3>
+        <p class="pdesc">Full UI/UX mastery guide — from wireframes to polished prototypes.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$99</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="product-card" data-cat="ui-kit" data-name="ICON SET PRO" data-price="15" data-img="https://www.figma.com/api/mcp/asset/6460843d-b117-4a0a-8b29-3592b880bdf2">
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/6460843d-b117-4a0a-8b29-3592b880bdf2" alt="Icon Set Pro" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>ICON SET PRO</h3>
+        <p class="pdesc">500+ custom icons in multiple styles — outline, filled & duo-tone.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$15</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 6 -->
+    <div class="product-card" data-cat="presets" data-name="ANIMATION PRESETS" data-price="25" data-img="https://www.figma.com/api/mcp/asset/2a10df07-ca93-49cb-8d6e-85699c09bb17">
+      <div class="ribbon digital">DIGITAL</div>
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/2a10df07-ca93-49cb-8d6e-85699c09bb17" alt="Animation Presets" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>ANIMATION PRESETS</h3>
+        <p class="pdesc">After Effects & Lottie-ready motion presets for smooth UI animations.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$25</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 7 — Sold Out -->
+    <div class="product-card sold-out" data-cat="assets" data-name="CHARACTER PACK VOL.1" data-price="22" data-img="https://www.figma.com/api/mcp/asset/b0c729a1-449e-45cd-b912-c8b6b966daa5">
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/b0c729a1-449e-45cd-b912-c8b6b966daa5" alt="Character Pack" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="notifySoldOut()">NOTIFY ME</button></div>
+        <div class="sold-out-badge">SOLD OUT</div>
+      </div>
+      <div class="product-body">
+        <h3>CHARACTER PACK VOL.1</h3>
+        <p class="pdesc">Illustrated cartoon character sheets with multiple expressions and poses.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$22</span></div>
+          <button class="add-btn" onclick="notifySoldOut()" style="background:rgba(80,80,80,0.3);border-color:#555;cursor:not-allowed;">SOLD OUT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 8 -->
+    <div class="product-card" data-cat="courses" data-name="GAME DEV BOOTCAMP" data-price="79" data-img="https://www.figma.com/api/mcp/asset/f0fba7cd-0717-41eb-a666-cea529e80008">
+      <div class="ribbon digital">COURSE</div>
+      <div class="ribbon" style="top:44px; background:#8e44ad;">NEW</div>
+      <div class="product-img">
+        <img src="https://www.figma.com/api/mcp/asset/f0fba7cd-0717-41eb-a666-cea529e80008" alt="Game Dev Bootcamp" />
+        <div class="quick-add"><button class="quick-add-btn" onclick="addFromCard(this)">QUICK ADD</button></div>
+      </div>
+      <div class="product-body">
+        <h3>GAME DEV BOOTCAMP</h3>
+        <p class="pdesc">Build your first 2D game from scratch — design, code & publish.</p>
+        <div class="product-footer">
+          <div class="price-wrap"><span class="price">$79</span></div>
+          <button class="add-btn" onclick="addFromCard(this)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end shop-grid -->
+
+  <!-- ═══ FOOTER ═══ -->
   <footer>
-    <p>© 2024 Mayamba Maxwell. All rights reserved.</p>
-    <p>mayambamaxwell@gmail.com</p>
+    <div class="footer-top">
+      <a href="index.html" class="footer-logo">MAYAMBA MAXWELL</a>
+      <div class="social-links">
+        <a href="https://x.com/_mayamba" target="_blank" aria-label="Twitter/X"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://github.com/mayambamaxwell" target="_blank" aria-label="GitHub"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+        <a href="https://t.me/Max_Designr" target="_blank" aria-label="Telegram"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+        <a href="https://www.behance.net/mayambamaxwell" target="_blank" aria-label="Behance"><svg width="22" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7.443 5.35c.639 0 1.23.05 1.77.198.54.099.993.297 1.377.594.384.247.67.594.868 1.04.197.445.296.99.296 1.583 0 .693-.148 1.287-.494 1.731-.297.446-.742.793-1.286 1.04.742.198 1.335.594 1.72 1.139.395.545.593 1.238.593 2.03 0 .693-.148 1.287-.395 1.78-.247.494-.642.89-1.087 1.188-.444.297-.99.544-1.584.693-.593.148-1.187.198-1.83.198H0V5.35h7.443zM7.1 10.9c.543 0 .99-.148 1.335-.396.346-.247.494-.643.494-1.188 0-.297-.049-.544-.148-.742-.099-.198-.247-.346-.395-.445-.198-.099-.396-.198-.593-.247-.198-.05-.446-.05-.693-.05H2.97V10.9H7.1zm.198 5.502c.297 0 .544-.05.791-.099.248-.05.446-.148.644-.297.198-.148.346-.297.445-.545.099-.198.148-.445.148-.742 0-.594-.148-1.04-.494-1.337-.346-.247-.791-.395-1.385-.395H2.97v3.415H7.298zm9.387-9.512c1.583 0 2.77.445 3.563 1.336.792.89 1.187 2.128 1.187 3.712v.692H13.99c0 .792.247 1.386.742 1.781.494.395 1.088.594 1.78.594.594 0 1.089-.148 1.484-.396.395-.247.693-.544.89-.89h2.62c-.395 1.188-1.038 2.03-1.83 2.523-.79.494-1.78.742-2.917.742-.792 0-1.534-.099-2.178-.346-.643-.247-1.187-.594-1.632-1.04-.444-.445-.791-1.04-1.039-1.682-.247-.693-.395-1.435-.395-2.277 0-.792.148-1.534.395-2.228.247-.693.593-1.287 1.039-1.781.445-.494.99-.89 1.632-1.188.643-.247 1.385-.396 2.128-.396zm-.099 2.425c-.593 0-1.088.148-1.483.494-.346.297-.593.742-.692 1.336h4.256c-.05-.594-.247-1.04-.594-1.336-.395-.346-.89-.494-1.484-.494zm-4.207-3.958h5.148v1.385H12.38V5.358z"/></svg></a>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <p class="footer-copy">© 2025 Mayamba Maxwell. All rights reserved. &nbsp;|&nbsp; <a href="mailto:mayambamaxwell@gmail.com">mayambamaxwell@gmail.com</a></p>
   </footer>
+
+  <script>
+    // ══════════════════════════════════════════
+    // CART STATE (persisted via localStorage)
+    // ══════════════════════════════════════════
+    let cart = JSON.parse(localStorage.getItem('mm_cart') || '[]');
+
+    function saveCart() { localStorage.setItem('mm_cart', JSON.stringify(cart)); }
+
+    function updateBadge() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const badge = document.getElementById('cartBadge');
+      badge.textContent = total;
+      badge.classList.toggle('visible', total > 0);
+    }
+
+    // ── Add to cart from card button / quick-add ──
+    function addFromCard(btn) {
+      const card = btn.closest('.product-card');
+      if (card.classList.contains('sold-out')) return;
+      const name  = card.dataset.name;
+      const price = parseInt(card.dataset.price);
+      const img   = card.dataset.img;
+      const existing = cart.find(i => i.name === name);
+      if (existing) existing.qty++;
+      else cart.push({ name, price, img, qty: 1 });
+      saveCart();
+      updateBadge();
+      bumpCartBtn();
+      flyDotAnimation(btn);
+      // flash the add-btn text
+      const addBtns = card.querySelectorAll('.add-btn, .quick-add-btn');
+      addBtns.forEach(b => {
+        const orig = b.textContent;
+        b.textContent = 'ADDED ✓';
+        b.classList.add('added');
+        setTimeout(() => { b.textContent = orig; b.classList.remove('added'); }, 1200);
+      });
+      renderDrawer();
+    }
+
+    function notifySoldOut() {
+      alert('This item is sold out. We'll notify you when it\'s back!');
+    }
+
+    // ── Cart button bump animation ──
+    function bumpCartBtn() {
+      const btn = document.getElementById('cartBtn');
+      btn.classList.remove('bump');
+      void btn.offsetWidth; // reflow
+      btn.classList.add('bump');
+      btn.addEventListener('animationend', () => btn.classList.remove('bump'), { once: true });
+    }
+
+    // ── Flying dot from button to cart icon ──
+    function flyDotAnimation(triggerEl) {
+      const cartBtn = document.getElementById('cartBtn');
+      const src = triggerEl.getBoundingClientRect();
+      const dst = cartBtn.getBoundingClientRect();
+      const dot = document.createElement('div');
+      dot.className = 'fly-dot';
+      dot.style.left = (src.left + src.width / 2 - 5) + 'px';
+      dot.style.top  = (src.top  + src.height/ 2 - 5) + 'px';
+      document.body.appendChild(dot);
+      requestAnimationFrame(() => {
+        dot.style.transition = 'left 0.5s cubic-bezier(0.4,0,0.2,1), top 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s, transform 0.5s';
+        dot.style.left = (dst.left + dst.width / 2 - 5) + 'px';
+        dot.style.top  = (dst.top  + dst.height/ 2 - 5) + 'px';
+        dot.style.opacity = '0';
+        dot.style.transform = 'scale(0.3)';
+      });
+      setTimeout(() => dot.remove(), 600);
+    }
+
+    // ── Draw cart drawer contents ──
+    function renderDrawer() {
+      const container = document.getElementById('drawerItems');
+      const footer    = document.getElementById('drawerFooter');
+      const empty     = document.getElementById('cartEmpty');
+
+      if (cart.length === 0) {
+        container.innerHTML = '';
+        container.appendChild(empty);
+        empty.style.display = '';
+        footer.style.display = 'none';
+        return;
+      }
+
+      empty.style.display = 'none';
+      footer.style.display = '';
+
+      // keep empty node in DOM but hidden, rebuild items
+      const existing = container.querySelectorAll('.cart-item');
+      existing.forEach(e => e.remove());
+
+      cart.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+          <div class="cart-item-img">
+            <img src="${item.img}" alt="${item.name}" />
+          </div>
+          <div class="cart-item-info">
+            <div class="cname">${item.name}</div>
+            <div class="cprice">$${(item.price * item.qty).toFixed(2)}</div>
+            <div class="qty-control">
+              <button class="qty-btn" data-idx="${idx}" data-action="dec">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" data-idx="${idx}" data-action="inc">+</button>
+            </div>
+          </div>
+          <button class="cart-remove" data-idx="${idx}" aria-label="Remove">✕</button>
+        `;
+        container.appendChild(el);
+      });
+
+      // total
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      document.getElementById('drawerTotal').textContent = '$' + total.toFixed(2);
+
+      // attach qty/remove events
+      container.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = parseInt(btn.dataset.idx);
+          if (btn.dataset.action === 'inc') cart[i].qty++;
+          else { cart[i].qty--; if (cart[i].qty <= 0) cart.splice(i, 1); }
+          saveCart(); updateBadge(); renderDrawer();
+        });
+      });
+      container.querySelectorAll('.cart-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          cart.splice(parseInt(btn.dataset.idx), 1);
+          saveCart(); updateBadge(); renderDrawer();
+        });
+      });
+    }
+
+    // ── Open / close drawer ──
+    function openCart() {
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('cartOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      renderDrawer();
+    }
+    function closeCart() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('cartOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('drawerClose').addEventListener('click', closeCart);
+    document.getElementById('cartOverlay').addEventListener('click', closeCart);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
+
+    // ── Checkout ──
+    function handleCheckout() {
+      if (cart.length === 0) return;
+      alert('Checkout coming soon! Use Paystack below for now.');
+    }
+
+    // ── Filter ──
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.product-card').forEach(card => {
+          card.classList.toggle('hidden', f !== 'all' && card.dataset.cat !== f);
+        });
+      });
+    });
+
+    // ── Init ──
+    updateBadge();
+    renderDrawer();
+  </script>
 </body>
 </html>

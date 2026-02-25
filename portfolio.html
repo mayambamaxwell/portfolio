@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="p:domain_verify" content="4c73458ccf2d01d0597763812babbe4d"/>
+  <title>Portfolio | Mayamba Maxwell</title>
+  <link rel="icon" type="image/png" href="/Assets/titleImage.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-METVLYPXSK');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:       #699966;
+      --green-light: rgba(105,153,102,0.18);
+      --bg:          #1c1c1c;
+      --text:        #d1d5db;
+      --muted:       #9ca3af;
+      --white:       #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Anton', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 65px;
+      background: rgba(28,28,28,0.88);
+      border-bottom: 1px solid rgba(58,90,58,0.25);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+    }
+
+    nav { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+
+    .logo { color: var(--green); font-size: 20px; letter-spacing: 1px; text-decoration: none; white-space: nowrap; }
+
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+
+    .nav-links a {
+      color: var(--white); text-decoration: none;
+      font-size: 14px; letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+
+    .nav-links .btn-contact {
+      background: var(--green); color: var(--white);
+      padding: 6px 18px; border-radius: 5px;
+      transition: opacity 0.2s;
+    }
+    .nav-links .btn-contact:hover { opacity: 0.85; }
+
+    /* ─── PAGE HERO ─── */
+    .page-hero {
+      padding: 120px 60px 36px;
+      text-align: center;
+    }
+    .page-hero h1 {
+      font-size: clamp(40px, 5vw, 72px);
+      color: var(--white);
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+    }
+    .page-hero p { color: var(--muted); font-size: 15px; letter-spacing: 1.5px; }
+    .page-hero span { color: var(--green); }
+
+    /* ─── FILTER TABS ─── */
+    .filter-bar {
+      display: flex; justify-content: center;
+      gap: 10px; flex-wrap: wrap;
+      padding: 20px 60px 44px;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid rgba(105,153,102,0.3);
+      color: var(--muted);
+      padding: 8px 22px;
+      border-radius: 999px;
+      font-family: 'Anton', sans-serif;
+      font-size: 13px; letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+
+    /* ─── MASONRY GRID ─── */
+    .grid-wrap {
+      padding: 0 40px 80px;
+      columns: 3;
+      column-gap: 14px;
+    }
+
+    .grid-item {
+      break-inside: avoid;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: rgba(74,102,74,0.2);
+      /* fade-in on filter */
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .grid-item.hidden {
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .grid-item img {
+      width: 100%; display: block;
+      transition: transform 0.45s ease;
+    }
+
+    .grid-item:hover img { transform: scale(1.05); }
+
+    /* ── Hover overlay (Chris Piascik style) ── */
+    .grid-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.82) 0%,
+        rgba(0,0,0,0.15) 45%,
+        transparent 100%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 18px 20px;
+    }
+
+    .grid-item:hover .grid-overlay { opacity: 1; }
+
+    .item-title {
+      color: var(--white); font-size: 17px; letter-spacing: 0.5px;
+      transform: translateY(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .item-category {
+      color: var(--green); font-size: 11px; letter-spacing: 1.5px;
+      margin-top: 4px;
+      transform: translateY(10px);
+      transition: transform 0.3s ease 0.04s;
+    }
+
+    .grid-item:hover .item-title,
+    .grid-item:hover .item-category { transform: translateY(0); }
+
+    /* little expand pip */
+    .expand-pip {
+      position: absolute; top: 12px; right: 12px;
+      width: 28px; height: 28px;
+      background: rgba(105,153,102,0.88);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.6);
+      transition: opacity 0.2s, transform 0.25s;
+    }
+
+    .grid-item:hover .expand-pip { opacity: 1; transform: scale(1); }
+
+    .expand-pip svg { width: 12px; height: 12px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(8,8,8,0.97);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    .lightbox.open { opacity: 1; pointer-events: all; }
+
+    .lb-close {
+      position: fixed; top: 22px; right: 26px;
+      background: none; border: none;
+      color: var(--white); font-size: 26px;
+      cursor: pointer; line-height: 1;
+      transition: color 0.2s, transform 0.25s;
+      z-index: 1001;
+    }
+
+    .lb-close:hover { color: var(--green); transform: rotate(90deg); }
+
+    .lb-inner {
+      position: relative;
+      max-width: 860px; width: 90%;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .lb-img-wrap {
+      width: 100%; border-radius: 14px; overflow: hidden;
+      max-height: 62vh;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(58,90,58,0.1);
+    }
+
+    .lb-img-wrap img {
+      max-width: 100%; max-height: 62vh;
+      object-fit: contain; display: block;
+      border-radius: 14px;
+      transition: opacity 0.2s;
+    }
+
+    .lb-img-wrap img.fading { opacity: 0; }
+
+    .lb-meta { margin-top: 22px; text-align: center; }
+
+    .lb-meta h2 { font-size: 26px; color: var(--white); letter-spacing: 0.5px; margin-bottom: 6px; }
+    .lb-meta p  { color: var(--green); font-size: 13px; letter-spacing: 1.5px; }
+
+    /* ── Bottom arrows + counter ── */
+    .lb-nav {
+      display: flex; align-items: center; gap: 28px;
+      margin-top: 26px;
+    }
+
+    .lb-arrow {
+      background: var(--green-light);
+      border: 1px solid rgba(105,153,102,0.35);
+      color: var(--white);
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 20px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .lb-arrow:hover { background: var(--green); transform: scale(1.1); }
+
+    .lb-counter { color: var(--muted); font-size: 15px; min-width: 64px; text-align: center; }
+    .lb-counter em { color: var(--green); font-style: normal; }
+
+    .lb-hint {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,0.2); font-size: 11px; letter-spacing: 1.5px;
+      pointer-events: none;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: rgba(58,90,58,0.2);
+      border-top: 1px solid rgba(58,90,58,0.3);
+      padding: 40px 60px;
+    }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+    .footer-logo { color: var(--green); font-size: 20px; text-decoration: none; }
+    .social-links { display: flex; gap: 18px; }
+    .social-links a { color: var(--muted); transition: color 0.2s, transform 0.2s; display: flex; align-items: center; }
+    .social-links a:hover { color: var(--green); transform: translateY(-2px); }
+    .footer-divider { border: none; border-top: 1px solid rgba(58,90,58,0.2); margin-bottom: 22px; }
+    .footer-copy { text-align: center; color: var(--muted); font-size: 14px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1000px) {
+      .grid-wrap { columns: 2; padding: 0 24px 60px; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 0 20px; }
+      .nav-links { display: none; }
+      .grid-wrap { columns: 1; padding: 0 14px 48px; }
+      .page-hero { padding: 96px 20px 24px; }
+      .filter-bar { padding: 16px 20px 28px; }
+      footer { padding: 32px 20px; }
+      .lb-inner { width: 96%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <nav>
+      <a href="index.html" class="logo">MAYAMBA MAXWELL</a>
+      <ul class="nav-links">
+        <li><a href="index.html#projects">PROJECTS</a></li>
+        <li><a href="portfolio.html" class="active">PORTFOLIO</a></li>
+        <li><a href="index.html#about">ABOUT</a></li>
+        <li><a href="index.html#commissions">COMMISSIONS</a></li>
+        <li><a href="Shop.html">SHOP</a></li>
+        <li><a href="index.html#contact" class="btn-contact">CONTACT</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ═══ PAGE HERO ═══ -->
+  <div class="page-hero">
+    <h1>PORTFOLIO</h1>
+    <p>DESIGN &nbsp;·&nbsp; <span>ANIMATION</span> &nbsp;·&nbsp; GAME DEV &nbsp;·&nbsp; <span>ILLUSTRATION</span></p>
+  </div>
+
+  <!-- ═══ FILTER TABS ═══ -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="ui-ux">UI/UX</button>
+    <button class="filter-btn" data-filter="animation">ANIMATION</button>
+    <button class="filter-btn" data-filter="game-dev">GAME DEV</button>
+    <button class="filter-btn" data-filter="illustration">ILLUSTRATION</button>
+  </div>
+
+  <!-- ═══ MASONRY GRID ═══ -->
+  <div class="grid-wrap" id="portfolioGrid">
+
+    <div class="grid-item" data-cat="ui-ux" data-title="FITNESS APP UI" data-desc="UI/UX DESIGN">
+      <img src="https://www.figma.com/api/mcp/asset/6460843d-b117-4a0a-8b29-3592b880bdf2" alt="Fitness App UI" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">FITNESS APP UI</p>
+        <p class="item-category">UI/UX DESIGN</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="animation" data-title="BRAND IDENTITY ANIMATION" data-desc="MOTION DESIGN">
+      <img src="https://www.figma.com/api/mcp/asset/2a10df07-ca93-49cb-8d6e-85699c09bb17" alt="Brand Identity Animation" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">BRAND IDENTITY ANIMATION</p>
+        <p class="item-category">MOTION DESIGN</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="game-dev" data-title="2D PLATFORMER WORLD" data-desc="GAME DEVELOPMENT">
+      <img src="https://www.figma.com/api/mcp/asset/b0c729a1-449e-45cd-b912-c8b6b966daa5" alt="2D Platformer World" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">2D PLATFORMER WORLD</p>
+        <p class="item-category">GAME DEVELOPMENT</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="illustration" data-title="CHARACTER ILLUSTRATIONS" data-desc="ILLUSTRATION">
+      <img src="https://www.figma.com/api/mcp/asset/60f81544-8354-440a-9ef0-c25ffab4e7bb" alt="Character Illustrations" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">CHARACTER ILLUSTRATIONS</p>
+        <p class="item-category">ILLUSTRATION</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="game-dev" data-title="ENVIRONMENT CONCEPT ART" data-desc="GAME DEVELOPMENT">
+      <img src="https://www.figma.com/api/mcp/asset/7a0293b1-4ad6-4457-aa7d-dea34359e014" alt="Environment Concept Art" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">ENVIRONMENT CONCEPT ART</p>
+        <p class="item-category">GAME DEVELOPMENT</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="animation" data-title="LOGO MOTION REEL" data-desc="MOTION DESIGN">
+      <img src="https://www.figma.com/api/mcp/asset/49cc3b8c-0819-4e07-8e64-a5294303fe50" alt="Logo Motion Reel" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">LOGO MOTION REEL</p>
+        <p class="item-category">MOTION DESIGN</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="ui-ux" data-title="PRODUCT DESIGN SYSTEM" data-desc="UI/UX DESIGN">
+      <img src="https://www.figma.com/api/mcp/asset/fc274547-1c3a-4003-986c-757e196bd4ba" alt="Product Design System" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">PRODUCT DESIGN SYSTEM</p>
+        <p class="item-category">UI/UX DESIGN</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="illustration" data-title="TECH STARTUP BRANDING" data-desc="ANIMATION &amp; ILLUSTRATION">
+      <img src="https://www.figma.com/api/mcp/asset/31a85ebb-1ad7-4c4b-b5a0-a350c27fd51f" alt="Tech Startup Branding" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">TECH STARTUP BRANDING</p>
+        <p class="item-category">ANIMATION &amp; ILLUSTRATION</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+    <div class="grid-item" data-cat="game-dev" data-title="HAND-CRAFTED CHARACTERS" data-desc="GAME DEVELOPMENT">
+      <img src="https://www.figma.com/api/mcp/asset/f0fba7cd-0717-41eb-a666-cea529e80008" alt="Hand-crafted Characters" loading="lazy" />
+      <div class="grid-overlay">
+        <p class="item-title">HAND-CRAFTED CHARACTERS</p>
+        <p class="item-category">GAME DEVELOPMENT</p>
+      </div>
+      <div class="expand-pip"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+    </div>
+
+  </div><!-- /grid-wrap -->
+
+  <!-- ═══ LIGHTBOX ═══ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lb-close" id="lbClose" aria-label="Close lightbox">✕</button>
+
+    <div class="lb-inner">
+      <div class="lb-img-wrap">
+        <img id="lbImg" src="" alt="" />
+      </div>
+      <div class="lb-meta">
+        <h2 id="lbTitle"></h2>
+        <p id="lbDesc"></p>
+      </div>
+      <!-- ← ARROWS AT THE BOTTOM → -->
+      <div class="lb-nav">
+        <button class="lb-arrow" id="lbPrev" aria-label="Previous image">&#8592;</button>
+        <span class="lb-counter"><em id="lbCur">1</em> / <span id="lbTot">9</span></span>
+        <button class="lb-arrow" id="lbNext" aria-label="Next image">&#8594;</button>
+      </div>
+    </div>
+
+    <p class="lb-hint">← → ARROW KEYS &nbsp;·&nbsp; ESC TO CLOSE</p>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-top">
+      <a href="index.html" class="footer-logo">MAYAMBA MAXWELL</a>
+      <div class="social-links">
+        <a href="https://x.com/_mayamba" target="_blank" aria-label="Twitter/X">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://github.com/mayambamaxwell" target="_blank" aria-label="GitHub">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://t.me/Max_Designr" target="_blank" aria-label="Telegram">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+        <a href="https://www.behance.net/mayambamaxwell" target="_blank" aria-label="Behance">
+          <svg width="20" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M7.443 5.35c.639 0 1.23.05 1.77.198.54.099.993.297 1.377.594.384.247.67.594.868 1.04.197.445.296.99.296 1.583 0 .693-.148 1.287-.494 1.731-.297.446-.742.793-1.286 1.04.742.198 1.335.594 1.72 1.139.395.545.593 1.238.593 2.03 0 .693-.148 1.287-.395 1.78-.247.494-.642.89-1.087 1.188-.444.297-.99.544-1.584.693-.593.148-1.187.198-1.83.198H0V5.35h7.443zM7.1 10.9c.543 0 .99-.148 1.335-.396.346-.247.494-.643.494-1.188 0-.297-.049-.544-.148-.742-.099-.198-.247-.346-.395-.445-.198-.099-.396-.198-.593-.247-.198-.05-.446-.05-.693-.05H2.97V10.9H7.1zm.198 5.502c.297 0 .544-.05.791-.099.248-.05.446-.148.644-.297.198-.148.346-.297.445-.545.099-.198.148-.445.148-.742 0-.594-.148-1.04-.494-1.337-.346-.247-.791-.395-1.385-.395H2.97v3.415H7.298zm9.387-9.512c1.583 0 2.77.445 3.563 1.336.792.89 1.187 2.128 1.187 3.712v.692H13.99c0 .792.247 1.386.742 1.781.494.395 1.088.594 1.78.594.594 0 1.089-.148 1.484-.396.395-.247.693-.544.89-.89h2.62c-.395 1.188-1.038 2.03-1.83 2.523-.79.494-1.78.742-2.917.742-.792 0-1.534-.099-2.178-.346-.643-.247-1.187-.594-1.632-1.04-.444-.445-.791-1.04-1.039-1.682-.247-.693-.395-1.435-.395-2.277 0-.792.148-1.534.395-2.228.247-.693.593-1.287 1.039-1.781.445-.494.99-.89 1.632-1.188.643-.247 1.385-.396 2.128-.396zm-.099 2.425c-.593 0-1.088.148-1.483.494-.346.297-.593.742-.692 1.336h4.256c-.05-.594-.247-1.04-.594-1.336-.395-.346-.89-.494-1.484-.494zm-4.207-3.958h5.148v1.385H12.38V5.358z"/></svg>
+        </a>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <p class="footer-copy">© 2025 Mayamba Maxwell. All rights reserved. &nbsp;|&nbsp; mayambamaxwell@gmail.com</p>
+  </footer>
+
+  <script>
+    // ─── All grid items ───
+    const allItems = [...document.querySelectorAll('.grid-item')];
+    let currentIndex = 0;
+    let visibleItems = allItems;
+
+    // ─── Filter ───
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+
+        allItems.forEach(item => {
+          const show = f === 'all' || item.dataset.cat === f;
+          item.classList.toggle('hidden', !show);
+        });
+
+        visibleItems = allItems.filter(i => !i.classList.contains('hidden'));
+      });
+    });
+
+    // ─── Lightbox elements ───
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lbImg');
+    const lbTitle = document.getElementById('lbTitle');
+    const lbDesc  = document.getElementById('lbDesc');
+    const lbCur   = document.getElementById('lbCur');
+    const lbTot   = document.getElementById('lbTot');
+
+    function showItem(index) {
+      visibleItems = allItems.filter(i => !i.classList.contains('hidden'));
+      currentIndex = (index + visibleItems.length) % visibleItems.length;
+      const item = visibleItems[currentIndex];
+
+      lbImg.src = item.querySelector('img').src;
+      lbImg.alt = item.querySelector('img').alt;
+      lbTitle.textContent = item.dataset.title || '';
+      lbDesc.innerHTML    = item.dataset.desc  || '';
+      lbCur.textContent   = currentIndex + 1;
+      lbTot.textContent   = visibleItems.length;
+    }
+
+    function openLb(index) {
+      showItem(index);
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLb() {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function nav(dir) {
+      lbImg.classList.add('fading');
+      setTimeout(() => {
+        showItem(currentIndex + dir);
+        lbImg.classList.remove('fading');
+      }, 180);
+    }
+
+    // Open on grid item click
+    allItems.forEach(item => {
+      item.addEventListener('click', () => {
+        visibleItems = allItems.filter(i => !i.classList.contains('hidden'));
+        const idx = visibleItems.indexOf(item);
+        if (idx !== -1) openLb(idx);
+      });
+    });
+
+    document.getElementById('lbClose').addEventListener('click', closeLb);
+    document.getElementById('lbPrev').addEventListener('click', () => nav(-1));
+    document.getElementById('lbNext').addEventListener('click', () => nav(1));
+
+    // Click dark backdrop to close
+    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'ArrowRight') nav(1);
+      if (e.key === 'ArrowLeft')  nav(-1);
+      if (e.key === 'Escape')     closeLb();
+    });
+  </script>
+</body>
+</html>

@@ -5,88 +5,471 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="p:domain_verify" content="4c73458ccf2d01d0597763812babbe4d"/>
   <title>Mayamba Maxwell | Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="/Assets/titleImage.png"/>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 
-  gtag('config', 'G-METVLYPXSK');
-</script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-METVLYPXSK');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #699966;
+      --green-light: rgba(105,153,102,0.2);
+      --bg: #1c1c1c;
+      --text: #d1d5db;
+      --muted: #9ca3af;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Anton', sans-serif; overflow-x: hidden; }
+
+    /* ─── NAV ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 65px;
+      background: rgba(28,28,28,0.88);
+      border-bottom: 1px solid rgba(58,90,58,0.25);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; padding: 0 60px;
+    }
+    nav { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .logo { color: var(--green); font-size: 20px; letter-spacing: 1px; text-decoration: none; white-space: nowrap; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--white); text-decoration: none; font-size: 14px; letter-spacing: 0.5px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links .btn-contact {
+      background: var(--green); color: var(--white);
+      padding: 6px 18px; border-radius: 5px; font-size: 14px; text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-links .btn-contact:hover { opacity: 0.85; }
+
+    /* cart icon in nav */
+    .cart-btn {
+      position: relative; cursor: pointer; color: var(--white);
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: none; font-family: 'Anton', sans-serif;
+      font-size: 14px; letter-spacing: 0.5px; transition: color 0.2s; padding: 0;
+      text-decoration: none;
+    }
+    .cart-btn:hover { color: var(--green); }
+    .cart-badge {
+      position: absolute; top: -7px; right: -10px;
+      background: var(--green); color: #fff;
+      font-size: 10px; width: 17px; height: 17px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; overflow: hidden;
+      padding: 80px 80px 80px; padding-top: 130px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 70% 50%, rgba(105,153,102,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(105,153,102,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(105,153,102,0.04) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .hero-content h1 {
+      font-size: clamp(48px, 7vw, 96px); color: var(--white);
+      line-height: 1; letter-spacing: -2px; margin-bottom: 20px;
+      animation: fadeInUp 0.7s ease both;
+    }
+    .hero-subtitle { color: var(--green); font-size: 18px; letter-spacing: 1px; margin-bottom: 20px; animation: fadeInUp 0.7s 0.15s ease both; }
+    .hero-desc { font-size: 17px; line-height: 1.7; color: var(--text); max-width: 600px; margin-bottom: 32px; animation: fadeInUp 0.7s 0.25s ease both; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 32px; animation: fadeInUp 0.7s 0.35s ease both; }
+    .btn-primary {
+      display: inline-block; background: var(--green); color: var(--white);
+      padding: 14px 30px; border-radius: 12px; font-size: 16px; text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 10px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s, opacity 0.2s; border: none; cursor: pointer;
+      font-family: 'Anton', sans-serif; letter-spacing: 0.5px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-cv {
+      display: inline-block; background: transparent; color: var(--green);
+      border: 1px solid var(--green); padding: 14px 30px; border-radius: 12px;
+      font-size: 16px; font-family: 'Anton', sans-serif; letter-spacing: 0.5px;
+      text-decoration: none; transition: background 0.2s, color 0.2s;
+    }
+    .btn-cv:hover { background: var(--green); color: var(--white); }
+    .hero-socials { display: flex; gap: 20px; animation: fadeInUp 0.7s 0.45s ease both; }
+    .hero-socials a { color: var(--muted); transition: color 0.2s, transform 0.2s; display: flex; align-items: center; }
+    .hero-socials a:hover { color: var(--green); transform: translateY(-2px); }
+    .hero-image { position: absolute; right: 0; bottom: 0; width: 580px; z-index: 1; pointer-events: none; }
+    .hero-image img { width: 100%; display: block; }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 80px; }
+    .section-title { text-align: center; color: var(--green); font-size: clamp(32px, 4vw, 48px); letter-spacing: 1px; margin-bottom: 56px; }
+
+    /* ─── PORTFOLIO PREVIEW ─── */
+    #portfolio { background: rgba(58,90,58,0.1); padding: 80px; }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .portfolio-item { aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: rgba(74,102,74,0.3); cursor: pointer; position: relative; }
+    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+    .portfolio-item:hover img { transform: scale(1.06); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(18,28,18,0.85) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 18px;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-label { color: var(--white); font-size: 15px; letter-spacing: 1px; transform: translateY(6px); transition: transform 0.3s ease; }
+    .portfolio-item:hover .portfolio-label { transform: translateY(0); }
+
+    /* ─── SUPPORT ─── */
+    #support { padding: 80px; }
+    .support-inner { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .btn-crypto {
+      background: rgba(58,90,58,0.3); color: var(--white);
+      border: 1px solid rgba(105,153,102,0.4); padding: 14px 32px; border-radius: 12px;
+      font-family: 'Anton', sans-serif; font-size: 16px; cursor: pointer; letter-spacing: 0.5px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-crypto:hover { background: rgba(58,90,58,0.5); transform: translateY(-2px); }
+    .btn-paystack {
+      display: inline-block; background: #00c3f7; color: #000;
+      padding: 14px 32px; border-radius: 12px; font-family: 'Anton', sans-serif;
+      font-size: 16px; text-decoration: none; letter-spacing: 0.5px;
+      transition: opacity 0.2s, transform 0.2s; border: none; cursor: pointer;
+    }
+    .btn-paystack:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* ─── SHOP PREVIEW ─── */
+    #shop { background: rgba(58,90,58,0.1); padding: 80px; }
+    .shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .shop-card {
+      background: var(--bg); border: 1px solid rgba(58,90,58,0.3); border-radius: 16px;
+      padding: 24px; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .shop-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .shop-img { width: 100%; height: 160px; border-radius: 12px; overflow: hidden; background: rgba(74,102,74,0.3); margin-bottom: 16px; }
+    .shop-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .shop-card h3 { font-size: 19px; color: var(--white); margin-bottom: 6px; }
+    .shop-card .desc { font-size: 15px; color: var(--muted); margin-bottom: 16px; }
+    .shop-footer { display: flex; align-items: center; justify-content: space-between; }
+    .price { color: var(--green); font-size: 22px; }
+    .btn-buy {
+      background: var(--green); color: var(--white); border: none; padding: 8px 18px;
+      border-radius: 8px; font-size: 13px; font-family: 'Anton', sans-serif; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-buy:hover { opacity: 0.85; }
+
+    /* ─── CONTACT ─── */
+    #contact { padding: 80px; }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 900px; margin: 0 auto; }
+    .contact-info h3 { color: var(--white); font-size: 26px; margin-bottom: 16px; }
+    .contact-info p  { color: var(--text); font-size: 16px; line-height: 1.6; margin-bottom: 32px; }
+    .contact-detail { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; color: var(--white); font-size: 15px; }
+    .contact-detail svg { color: var(--green); flex-shrink: 0; }
+    .contact-detail a { color: var(--white); text-decoration: none; }
+    .contact-detail a:hover { color: var(--green); }
+    .form-group { margin-bottom: 20px; }
+    .form-group input, .form-group textarea {
+      width: 100%; background: rgba(58,90,58,0.2); border: 1px solid rgba(58,90,58,0.3);
+      border-radius: 12px; padding: 16px 20px; color: var(--white); font-family: 'Anton', sans-serif;
+      font-size: 15px; outline: none; transition: border-color 0.2s; resize: none;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #adaebc; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--green); }
+    .form-group textarea { height: 154px; }
+    .btn-send {
+      width: 100%; background: var(--green); color: var(--white); border: none;
+      padding: 16px; border-radius: 12px; font-family: 'Anton', sans-serif; font-size: 16px;
+      cursor: pointer; transition: opacity 0.2s, transform 0.2s; letter-spacing: 0.5px;
+    }
+    .btn-send:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    footer { background: rgba(58,90,58,0.2); border-top: 1px solid rgba(58,90,58,0.3); padding: 48px 60px; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .footer-logo { color: var(--green); font-size: 22px; text-decoration: none; }
+    .social-links { display: flex; gap: 20px; }
+    .social-links a { color: var(--muted); transition: color 0.2s, transform 0.2s; display: flex; align-items: center; }
+    .social-links a:hover { color: var(--green); transform: translateY(-2px); }
+    .footer-divider { border: none; border-top: 1px solid rgba(58,90,58,0.2); margin-bottom: 28px; }
+    .footer-copy { text-align: center; color: var(--muted); font-size: 15px; }
+    .footer-copy a { color: var(--green); text-decoration: none; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1100px) {
+      header { padding: 0 40px; }
+      section, #portfolio, #shop, #contact, #support, footer { padding: 60px 40px; }
+      .shop-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-image { width: 360px; }
+    }
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      .nav-links { display: none; }
+      section, #portfolio, #shop, #contact, #support, footer { padding: 48px 20px; }
+      #hero { padding: 24px 20px; padding-top: 110px; }
+      .portfolio-grid, .shop-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .hero-image { display: none; }
+      .hero-content h1 { font-size: 44px; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- ═══ HEADER ═══ -->
   <header>
     <nav>
-      <ul class="navbar">
-        <li><a href="#about">About</a></li>
-        <li><a href="#portfolio">Portfolio</a></li>
-        <li><a href="Shop.html">Shop</a></li>
-        <li><a href="#contact">Contact</a></li>
+      <a href="#hero" class="logo">MAYAMBA MAXWELL</a>
+      <ul class="nav-links">
+        <li><a href="portfolio.html">PORTFOLIO</a></li>
+        <li><a href="shop.html">SHOP</a></li>
+        <li><a href="#support">SUPPORT</a></li>
+        <li>
+          <a href="shop.html" class="cart-btn" id="cartBtn" aria-label="Shopping Cart">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            CART
+            <span class="cart-badge" id="cartBadge">0</span>
+          </a>
+        </li>
+        <li><a href="#contact" class="btn-contact">CONTACT</a></li>
       </ul>
     </nav>
-    <h1>👋 Hi, I'm <span class="highlight">Mayamba Maxwell</span></h1>
-    <p>UI/UX Designer • Game Dev • Web Dev • Artist</p>
-    <div class="socials">
-      <a href="https://x.com/_mayamba" target="_blank">🐦</a>
-      <a href="https://github.com/mayambamaxwell" target="_blank">💻</a>
-      <a href="https://t.me/Max_Designr" target="_blank">✈️</a>
-      <a href="https://www.behance.net/mayambamaxwell target="_blank">🎨</a> <br>
-      <a class="cv-btn" href="Assets/Mayamba-Maxwell-CV.pdf" download>Download CV</a> <!-- keep only this yellow button -->
-    </div>
   </header>
 
-  <main>
-    <section>
-      <h2>About Me</h2>
-      <p>I’m a versatile creative working in UI/UX, game development, and web projects. Passionate about design, code, and storytelling through digital experiences.</p>
-    </section>
+  <!-- ═══ HERO ═══ -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-content">
+      <h1>MAYAMBA MAXWELL</h1>
+      <p class="hero-subtitle">UI/UX DESIGNER • ANIMATOR • MOTION DESIGNER • GAME DEVELOPER</p>
+      <p class="hero-desc">Creating digital experiences that blend creativity with functionality. Bringing ideas to life through design, motion, and interactive storytelling.</p>
+      <div class="hero-buttons">
+        <a href="portfolio.html" class="btn-primary">VIEW MY WORK</a>
+        <a href="Assets/Mayamba-Maxwell-CV.pdf" download class="btn-cv">DOWNLOAD CV</a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://x.com/_mayamba" target="_blank" aria-label="Twitter/X">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://github.com/mayambamaxwell" target="_blank" aria-label="GitHub">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://t.me/Max_Designr" target="_blank" aria-label="Telegram">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+        <a href="https://www.behance.net/mayambamaxwell" target="_blank" aria-label="Behance">
+          <svg width="22" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7.443 5.35c.639 0 1.23.05 1.77.198.54.099.993.297 1.377.594.384.247.67.594.868 1.04.197.445.296.99.296 1.583 0 .693-.148 1.287-.494 1.731-.297.446-.742.793-1.286 1.04.742.198 1.335.594 1.72 1.139.395.545.593 1.238.593 2.03 0 .693-.148 1.287-.395 1.78-.247.494-.642.89-1.087 1.188-.444.297-.99.544-1.584.693-.593.148-1.187.198-1.83.198H0V5.35h7.443zM7.1 10.9c.543 0 .99-.148 1.335-.396.346-.247.494-.643.494-1.188 0-.297-.049-.544-.148-.742-.099-.198-.247-.346-.395-.445-.198-.099-.396-.198-.593-.247-.198-.05-.446-.05-.693-.05H2.97V10.9H7.1zm.198 5.502c.297 0 .544-.05.791-.099.248-.05.446-.148.644-.297.198-.148.346-.297.445-.545.099-.198.148-.445.148-.742 0-.594-.148-1.04-.494-1.337-.346-.247-.791-.395-1.385-.395H2.97v3.415H7.298zm9.387-9.512c1.583 0 2.77.445 3.563 1.336.792.89 1.187 2.128 1.187 3.712v.692H13.99c0 .792.247 1.386.742 1.781.494.395 1.088.594 1.78.594.594 0 1.089-.148 1.484-.396.395-.247.693-.544.89-.89h2.62c-.395 1.188-1.038 2.03-1.83 2.523-.79.494-1.78.742-2.917.742-.792 0-1.534-.099-2.178-.346-.643-.247-1.187-.594-1.632-1.04-.444-.445-.791-1.04-1.039-1.682-.247-.693-.395-1.435-.395-2.277 0-.792.148-1.534.395-2.228.247-.693.593-1.287 1.039-1.781.445-.494.99-.89 1.632-1.188.643-.247 1.385-.396 2.128-.396zm-.099 2.425c-.593 0-1.088.148-1.483.494-.346.297-.593.742-.692 1.336h4.256c-.05-.594-.247-1.04-.594-1.336-.395-.346-.89-.494-1.484-.494zm-4.207-3.958h5.148v1.385H12.38V5.358z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://www.figma.com/api/mcp/asset/e3462b68-6ae8-4f70-8d35-774bd1fe56e8" alt="Mayamba Maxwell" />
+    </div>
+  </section>
 
-    <section>
-      <h2>Commissions</h2>
-      <form name="commission" method="POST" data-netlify="true">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="email" name="email" placeholder="Your Email" required />
-        <textarea name="details" placeholder="Project Details" required></textarea>
-        <button type="submit">Request a Quote</button>
-      </form>
-    </section>
+  <!-- ═══ PORTFOLIO PREVIEW ═══ -->
+  <section id="portfolio">
+    <h2 class="section-title">PORTFOLIO</h2>
+    <div class="portfolio-grid">
+      <div class="portfolio-item reveal">
+        <img src="https://www.figma.com/api/mcp/asset/6460843d-b117-4a0a-8b29-3592b880bdf2" alt="Fitness App UI" />
+        <div class="portfolio-overlay"><span class="portfolio-label">FITNESS APP UI</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://www.figma.com/api/mcp/asset/2a10df07-ca93-49cb-8d6e-85699c09bb17" alt="Brand Motion Graphics" />
+        <div class="portfolio-overlay"><span class="portfolio-label">BRAND MOTION GRAPHICS</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://www.figma.com/api/mcp/asset/b0c729a1-449e-45cd-b912-c8b6b966daa5" alt="Character Illustrations" />
+        <div class="portfolio-overlay"><span class="portfolio-label">CHARACTER ILLUSTRATIONS</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://www.figma.com/api/mcp/asset/60f81544-8354-440a-9ef0-c25ffab4e7bb" alt="2D Platformer Game" />
+        <div class="portfolio-overlay"><span class="portfolio-label">2D PLATFORMER GAME</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://www.figma.com/api/mcp/asset/7a0293b1-4ad6-4457-aa7d-dea34359e014" alt="Mobile App Design" />
+        <div class="portfolio-overlay"><span class="portfolio-label">MOBILE APP DESIGN</span></div>
+      </div>
+      <div class="portfolio-item reveal">
+        <img src="https://www.figma.com/api/mcp/asset/49cc3b8c-0819-4e07-8e64-a5294303fe50" alt="Environment Concept Art" />
+        <div class="portfolio-overlay"><span class="portfolio-label">ENVIRONMENT CONCEPT ART</span></div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:40px;">
+      <a href="portfolio.html" class="btn-primary">VIEW FULL PORTFOLIO →</a>
+    </div>
+  </section>
 
-    <section>
-      <h2>Support My Work</h2>
-      <button onclick="alert('Crypto payments coming soon!')">💸 Donate with Crypto</button>
-      <a href="https://paystack.shop/pay/mayamba" target="_blank">
-        <button class="paystack">Pay with Paystack</button>
-      </a>
-    </section>
+  <!-- ═══ SUPPORT MY WORK ═══ -->
+  <section id="support">
+    <h2 class="section-title">SUPPORT MY WORK</h2>
+    <div class="support-inner">
+      <button class="btn-crypto" onclick="alert('Crypto payments coming soon!')">💸 DONATE WITH CRYPTO</button>
+      <a href="https://paystack.shop/pay/mayamba" target="_blank" class="btn-paystack">PAY WITH PAYSTACK</a>
+    </div>
+  </section>
 
-    <section id="portfolio">
-      <h2>My Projects</h2>
-      <div class="projects">
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x200" alt="Project 1">
-          <h3>Animations and Illustrations</h3>
-          <p>A few collections of my art</p>
+  <!-- ═══ SHOP PREVIEW ═══ -->
+  <section id="shop">
+    <h2 class="section-title">SHOP</h2>
+    <div class="shop-grid">
+      <div class="shop-card reveal">
+        <div class="shop-img"><img src="https://www.figma.com/api/mcp/asset/b0110a5b-1789-4ed5-b71c-53a55ba2b90e" alt="UI Kit Bundle" /></div>
+        <h3>UI KIT BUNDLE</h3>
+        <p class="desc">Complete UI components</p>
+        <div class="shop-footer"><span class="price">$29</span><button class="btn-buy" onclick="addToCart('UI KIT BUNDLE', 29)">ADD TO CART</button></div>
+      </div>
+      <div class="shop-card reveal">
+        <div class="shop-img"><img src="https://www.figma.com/api/mcp/asset/a3e29159-90b6-4fa8-812c-7b403d7bb411" alt="Wallpaper Pack" /></div>
+        <h3>WALLPAPER PACK</h3>
+        <p class="desc">Motion graphics presets</p>
+        <div class="shop-footer"><span class="price">$39</span><button class="btn-buy" onclick="addToCart('WALLPAPER PACK', 39)">ADD TO CART</button></div>
+      </div>
+      <div class="shop-card reveal">
+        <div class="shop-img"><img src="https://www.figma.com/api/mcp/asset/5a4be39e-b061-4d95-8e91-08b6f16f774d" alt="Game Assets" /></div>
+        <h3>GAME ASSETS</h3>
+        <p class="desc">Character sprite pack</p>
+        <div class="shop-footer"><span class="price">$19</span><button class="btn-buy" onclick="addToCart('GAME ASSETS', 19)">ADD TO CART</button></div>
+      </div>
+      <div class="shop-card reveal">
+        <div class="shop-img"><img src="https://www.figma.com/api/mcp/asset/88649fab-a63a-4132-b02e-52e1fef18e53" alt="Design Course" /></div>
+        <h3>DESIGN COURSE</h3>
+        <p class="desc">Complete design guide</p>
+        <div class="shop-footer"><span class="price">$99</span><button class="btn-buy" onclick="addToCart('DESIGN COURSE', 99)">ADD TO CART</button></div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:40px;">
+      <a href="shop.html" class="btn-primary">VISIT FULL SHOP →</a>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section id="contact">
+    <h2 class="section-title">GET IN TOUCH</h2>
+    <div class="contact-inner">
+      <div class="contact-info">
+        <h3>LET'S WORK TOGETHER</h3>
+        <p>Have a project in mind? I'd love to hear about it. Let's create something amazing together.</p>
+        <div class="contact-detail">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span><a href="mailto:mayambamaxwell@gmail.com">mayambamaxwell@gmail.com</a></span>
         </div>
-
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x200" alt="Project 2">
-          <h3>UI/UX Design</h3>
-          <p>Mobile app prototype built in Figma with smooth flows.</p>
-        </div>
-
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x200" alt="Project 3">
-          <h3>Web Projects</h3>
-          <p>Responsive website with React and TailwindCSS.</p>
+        <div class="contact-detail">
+          <svg width="16" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Gombe, Nigeria</span>
         </div>
       </div>
-    </section>
-    <footer>
-      <p>© 2025 Mayamba Maxwell. All rights reserved.         mayambamaxwell@gmail.com </p>
-    </footer>
-  </main>
+      <form onsubmit="handleContactSubmit(event)">
+        <div class="form-group"><input type="text" placeholder="Your Name" required /></div>
+        <div class="form-group"><input type="email" placeholder="Your Email" required /></div>
+        <div class="form-group"><textarea placeholder="Your Message" required></textarea></div>
+        <button type="submit" class="btn-send">SEND MESSAGE</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-top">
+      <a href="#hero" class="footer-logo">MAYAMBA MAXWELL</a>
+      <div class="social-links">
+        <a href="https://x.com/_mayamba" target="_blank" aria-label="Twitter/X"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://github.com/mayambamaxwell" target="_blank" aria-label="GitHub"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+        <a href="https://t.me/Max_Designr" target="_blank" aria-label="Telegram"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+        <a href="https://www.behance.net/mayambamaxwell" target="_blank" aria-label="Behance"><svg width="22" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7.443 5.35c.639 0 1.23.05 1.77.198.54.099.993.297 1.377.594.384.247.67.594.868 1.04.197.445.296.99.296 1.583 0 .693-.148 1.287-.494 1.731-.297.446-.742.793-1.286 1.04.742.198 1.335.594 1.72 1.139.395.545.593 1.238.593 2.03 0 .693-.148 1.287-.395 1.78-.247.494-.642.89-1.087 1.188-.444.297-.99.544-1.584.693-.593.148-1.187.198-1.83.198H0V5.35h7.443zM7.1 10.9c.543 0 .99-.148 1.335-.396.346-.247.494-.643.494-1.188 0-.297-.049-.544-.148-.742-.099-.198-.247-.346-.395-.445-.198-.099-.396-.198-.593-.247-.198-.05-.446-.05-.693-.05H2.97V10.9H7.1zm.198 5.502c.297 0 .544-.05.791-.099.248-.05.446-.148.644-.297.198-.148.346-.297.445-.545.099-.198.148-.445.148-.742 0-.594-.148-1.04-.494-1.337-.346-.247-.791-.395-1.385-.395H2.97v3.415H7.298zm9.387-9.512c1.583 0 2.77.445 3.563 1.336.792.89 1.187 2.128 1.187 3.712v.692H13.99c0 .792.247 1.386.742 1.781.494.395 1.088.594 1.78.594.594 0 1.089-.148 1.484-.396.395-.247.693-.544.89-.89h2.62c-.395 1.188-1.038 2.03-1.83 2.523-.79.494-1.78.742-2.917.742-.792 0-1.534-.099-2.178-.346-.643-.247-1.187-.594-1.632-1.04-.444-.445-.791-1.04-1.039-1.682-.247-.693-.395-1.435-.395-2.277 0-.792.148-1.534.395-2.228.247-.693.593-1.287 1.039-1.781.445-.494.99-.89 1.632-1.188.643-.247 1.385-.396 2.128-.396zm-.099 2.425c-.593 0-1.088.148-1.483.494-.346.297-.593.742-.692 1.336h4.256c-.05-.594-.247-1.04-.594-1.336-.395-.346-.89-.494-1.484-.494zm-4.207-3.958h5.148v1.385H12.38V5.358z"/></svg></a>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <p class="footer-copy">© 2025 Mayamba Maxwell. All rights reserved. &nbsp;|&nbsp; <a href="mailto:mayambamaxwell@gmail.com">mayambamaxwell@gmail.com</a></p>
+  </footer>
+
+  <script>
+    // ── Cart state (shared via localStorage with shop.html) ──
+    let cart = JSON.parse(localStorage.getItem('mm_cart') || '[]');
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cartBadge');
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      badge.textContent = total;
+      badge.classList.toggle('visible', total > 0);
+    }
+
+    function addToCart(name, price) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) existing.qty++;
+      else cart.push({ name, price, qty: 1 });
+      localStorage.setItem('mm_cart', JSON.stringify(cart));
+      updateCartBadge();
+      animateCartBump();
+    }
+
+    function animateCartBump() {
+      const btn = document.getElementById('cartBtn');
+      btn.style.transform = 'scale(1.25)';
+      btn.style.color = 'var(--green)';
+      setTimeout(() => { btn.style.transform = ''; btn.style.color = ''; }, 300);
+    }
+
+    updateCartBadge();
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Active nav on scroll ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+      navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--green)' : ''; });
+    });
+
+    // ── Contact form ──
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-send');
+      btn.textContent = 'MESSAGE SENT ✓';
+      btn.style.background = '#3a5a3a';
+      setTimeout(() => { btn.textContent = 'SEND MESSAGE'; btn.style.background = ''; e.target.reset(); }, 3000);
+    }
+  </script>
 </body>
 </html>

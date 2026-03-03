@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project | Mayamba Maxwell</title>
+  <link rel="icon" type="image/png" href="/Assets/titleImage.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-METVLYPXSK"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-METVLYPXSK');</script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--green:#699966;--green-light:rgba(105,153,102,0.15);--bg:#1c1c1c;--card:#212121;--text:#d1d5db;--muted:#9ca3af;--white:#fff;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Anton',sans-serif;overflow-x:hidden;}
+
+    /* ── NAV ── */
+    header{position:fixed;top:0;left:0;right:0;z-index:200;height:65px;background:rgba(28,28,28,.9);border-bottom:1px solid rgba(58,90,58,.25);backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 60px;}
+    nav{width:100%;display:flex;align-items:center;justify-content:space-between;}
+    .logo{color:var(--green);font-size:20px;letter-spacing:1px;text-decoration:none;}
+    .nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
+    .nav-links a{color:var(--white);text-decoration:none;font-size:14px;letter-spacing:.5px;transition:color .2s;}
+    .nav-links a:hover{color:var(--green);}
+    .nav-links .btn-contact{background:var(--green);color:var(--white);padding:6px 18px;border-radius:5px;transition:opacity .2s;}
+    .nav-links .btn-contact:hover{opacity:.85;}
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb{padding:90px 60px 0;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);letter-spacing:.5px;}
+    .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s;}
+    .breadcrumb a:hover{color:var(--green);}
+    .breadcrumb span{color:var(--green);}
+
+    /* ── PROJECT HEADER ── */
+    .project-header{padding:24px 60px 40px;}
+    .project-cat{font-size:12px;letter-spacing:2px;color:var(--green);margin-bottom:10px;}
+    .project-title{font-size:clamp(32px,5vw,64px);color:var(--white);line-height:1;letter-spacing:-1px;margin-bottom:16px;}
+    .project-meta{display:flex;gap:24px;flex-wrap:wrap;align-items:center;}
+    .meta-pill{background:var(--green-light);border:1px solid rgba(105,153,102,.25);border-radius:100px;padding:5px 14px;font-size:12px;letter-spacing:1px;color:var(--muted);}
+    .meta-pill span{color:var(--white);}
+
+    /* ── MAIN LAYOUT ── */
+    .project-body{display:grid;grid-template-columns:1fr 340px;gap:40px;padding:0 60px 80px;align-items:start;}
+
+    /* ── GALLERY ── */
+    .gallery-col{}
+
+    /* Main viewer */
+    .gallery-main{border-radius:16px;overflow:hidden;background:rgba(58,90,58,.15);border:1px solid rgba(58,90,58,.2);position:relative;margin-bottom:12px;min-height:360px;display:flex;align-items:center;justify-content:center;}
+    .gallery-main img{width:100%;display:block;border-radius:16px;object-fit:contain;max-height:600px;}
+    .gallery-main video{width:100%;border-radius:16px;max-height:600px;background:#000;}
+    .gallery-main iframe.pdf-frame{width:100%;height:520px;border:none;border-radius:16px;}
+    .gallery-main .gif-wrap img{width:100%;border-radius:16px;}
+
+    /* nav arrows on main viewer */
+    .gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.55);border:none;color:var(--white);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:5;}
+    .gallery-arrow:hover{background:var(--green);}
+    .gallery-arrow.prev{left:12px;}
+    .gallery-arrow.next{right:12px;}
+    .gallery-counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border-radius:100px;padding:4px 14px;font-size:12px;letter-spacing:1px;color:var(--white);}
+
+    /* Thumbnail strip */
+    .gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+    .gallery-thumbs::-webkit-scrollbar{height:4px;}
+    .gallery-thumbs::-webkit-scrollbar-thumb{background:rgba(105,153,102,.3);border-radius:2px;}
+    .thumb{flex-shrink:0;width:72px;height:60px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s,opacity .2s;opacity:.6;background:rgba(58,90,58,.2);display:flex;align-items:center;justify-content:center;position:relative;}
+    .thumb.active{border-color:var(--green);opacity:1;}
+    .thumb:hover{opacity:.9;}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .thumb .thumb-icon{font-size:22px;line-height:1;}
+    .thumb .thumb-type{position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,.7);border-radius:3px;font-size:8px;padding:1px 4px;color:var(--white);letter-spacing:.5px;}
+
+    /* ── SIDEBAR ── */
+    .sidebar-col{display:flex;flex-direction:column;gap:28px;}
+
+    .sidebar-card{background:var(--card);border:1px solid rgba(58,90,58,.2);border-radius:16px;padding:24px;}
+    .sidebar-card h3{font-size:13px;letter-spacing:2px;color:var(--green);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(58,90,58,.2);}
+
+    /* Description */
+    .project-desc{font-size:15px;line-height:1.8;color:var(--text);font-family:'Anton',sans-serif;letter-spacing:.3px;}
+    .project-role{margin-top:14px;font-size:13px;color:var(--muted);}
+    .project-role strong{color:var(--green);}
+
+    /* Tools */
+    .tools-grid{display:flex;flex-wrap:wrap;gap:8px;}
+    .tool-tag{background:rgba(58,90,58,.25);border:1px solid rgba(105,153,102,.2);border-radius:8px;padding:6px 12px;font-size:12px;letter-spacing:.5px;color:var(--white);}
+
+    /* Credits */
+    .credit-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(58,90,58,.12);}
+    .credit-item:last-child{border-bottom:none;padding-bottom:0;}
+    .credit-avatar{width:38px;height:38px;border-radius:50%;background:rgba(105,153,102,.2);border:1px solid rgba(105,153,102,.3);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;overflow:hidden;}
+    .credit-avatar img{width:100%;height:100%;object-fit:cover;}
+    .credit-info{flex:1;min-width:0;}
+    .credit-name{color:var(--white);font-size:14px;margin-bottom:2px;}
+    .credit-role{color:var(--muted);font-size:11px;letter-spacing:.5px;}
+    .credit-link{color:var(--green);font-size:11px;text-decoration:none;margin-top:2px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .credit-link:hover{text-decoration:underline;}
+
+    /* ── PREV / NEXT PROJECT NAV ── */
+    .project-nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 60px 80px;}
+    .proj-nav-btn{background:var(--card);border:1px solid rgba(58,90,58,.2);border-radius:14px;padding:20px 24px;text-decoration:none;transition:border-color .25s,transform .25s;display:block;}
+    .proj-nav-btn:hover{border-color:var(--green);transform:translateY(-3px);}
+    .proj-nav-label{font-size:11px;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;}
+    .proj-nav-title{font-size:16px;color:var(--white);}
+    .proj-nav-btn.next-btn{text-align:right;}
+    .proj-nav-btn.prev-btn .proj-nav-label::before{content:'← ';}
+    .proj-nav-btn.next-btn .proj-nav-label::after{content:' →';}
+
+    /* ── NOT FOUND ── */
+    .not-found{text-align:center;padding:160px 40px;color:var(--muted);}
+    .not-found h2{font-size:48px;color:var(--white);margin-bottom:16px;}
+    .not-found a{color:var(--green);text-decoration:none;}
+
+    /* ── FOOTER ── */
+    footer{background:rgba(58,90,58,.2);border-top:1px solid rgba(58,90,58,.3);padding:40px 60px;}
+    .footer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+    .footer-logo{color:var(--green);font-size:20px;text-decoration:none;}
+    .social-links{display:flex;gap:20px;}
+    .social-links a{color:var(--muted);transition:color .2s,transform .2s;display:flex;align-items:center;}
+    .social-links a:hover{color:var(--green);transform:translateY(-2px);}
+    .footer-divider{border:none;border-top:1px solid rgba(58,90,58,.2);margin-bottom:24px;}
+    .footer-copy{text-align:center;color:var(--muted);font-size:14px;}
+    .footer-copy a{color:var(--green);text-decoration:none;}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1000px){
+      .project-body{grid-template-columns:1fr;}
+      .project-nav{grid-template-columns:1fr;}
+    }
+    @media(max-width:600px){
+      header{padding:0 20px;}
+      .nav-links{display:none;}
+      .breadcrumb,.project-header,.project-body,.project-nav{padding-left:20px;padding-right:20px;}
+      footer{padding:32px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo">MAYAMBA MAXWELL</a>
+    <ul class="nav-links">
+      <li><a href="index.html">HOME</a></li>
+      <li><a href="portfolio.html" class="active">PORTFOLIO</a></li>
+      <li><a href="shop.html">SHOP</a></li>
+      <li><a href="index.html#contact" class="btn-contact">CONTACT</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Dynamic content injected here -->
+<div id="pageContent"></div>
+
+<footer>
+  <div class="footer-top">
+    <a href="index.html" class="footer-logo">MAYAMBA MAXWELL</a>
+    <div class="social-links">
+      <a href="https://x.com/_mayamba" target="_blank"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://github.com/mayambamaxwell" target="_blank"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+      <a href="https://t.me/Max_Designr" target="_blank"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+      <a href="https://www.behance.net/mayambamaxwell" target="_blank"><svg width="20" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M7.443 5.35c.639 0 1.23.05 1.77.198.54.099.993.297 1.377.594.384.247.67.594.868 1.04.197.445.296.99.296 1.583 0 .693-.148 1.287-.494 1.731-.297.446-.742.793-1.286 1.04.742.198 1.335.594 1.72 1.139.395.545.593 1.238.593 2.03 0 .693-.148 1.287-.395 1.78-.247.494-.642.89-1.087 1.188-.444.297-.99.544-1.584.693-.593.148-1.187.198-1.83.198H0V5.35h7.443zM7.1 10.9c.543 0 .99-.148 1.335-.396.346-.247.494-.643.494-1.188 0-.297-.049-.544-.148-.742-.099-.198-.247-.346-.395-.445-.198-.099-.396-.198-.593-.247-.198-.05-.446-.05-.693-.05H2.97V10.9H7.1zm.198 5.502c.297 0 .544-.05.791-.099.248-.05.446-.148.644-.297.198-.148.346-.297.445-.545.099-.198.148-.445.148-.742 0-.594-.148-1.04-.494-1.337-.346-.247-.791-.395-1.385-.395H2.97v3.415H7.298zm9.387-9.512c1.583 0 2.77.445 3.563 1.336.792.89 1.187 2.128 1.187 3.712v.692H13.99c0 .792.247 1.386.742 1.781.494.395 1.088.594 1.78.594.594 0 1.089-.148 1.484-.396.395-.247.693-.544.89-.89h2.62c-.395 1.188-1.038 2.03-1.83 2.523-.79.494-1.78.742-2.917.742-.792 0-1.534-.099-2.178-.346-.643-.247-1.187-.594-1.632-1.04-.444-.445-.791-1.04-1.039-1.682-.247-.693-.395-1.435-.395-2.277 0-.792.148-1.534.395-2.228.247-.693.593-1.287 1.039-1.781.445-.494.99-.89 1.632-1.188.643-.247 1.385-.396 2.128-.396zm-.099 2.425c-.593 0-1.088.148-1.483.494-.346.297-.593.742-.692 1.336h4.256c-.05-.594-.247-1.04-.594-1.336-.395-.346-.89-.494-1.484-.494zm-4.207-3.958h5.148v1.385H12.38V5.358z"/></svg></a>
+    </div>
+  </div>
+  <hr class="footer-divider"/>
+  <p class="footer-copy">© 2025 Mayamba Maxwell. All rights reserved. &nbsp;|&nbsp; <a href="mailto:mayambamaxwell@gmail.com">mayambamaxwell@gmail.com</a></p>
+</footer>
+
+<script>
+// ╔════════════════════════════════════════════════════════════════════╗
+// ║  PROJECT DATA                                                     ║
+// ║  ─────────────────────────────────────────────────────────────── ║
+// ║  To ADD a new project:                                            ║
+// ║    1. Add an entry below with a unique id (matches ?id= in URL)  ║
+// ║    2. Add the matching <a> card in portfolio.html                 ║
+// ║                                                                   ║
+// ║  MEDIA TYPES supported per item in the gallery array:            ║
+// ║    { type:'image', url:'...', caption:'...' }                    ║
+// ║    { type:'video', url:'...', caption:'...' }   ← mp4 / webm    ║
+// ║    { type:'youtube', url:'https://youtube.com/embed/VIDEO_ID' }  ║
+// ║    { type:'gif',   url:'...', caption:'...' }                    ║
+// ║    { type:'pdf',   url:'...', caption:'...' }                    ║
+// ║                                                                   ║
+// ║  CREDITS fields:                                                  ║
+// ║    name, role, avatar (URL or emoji), link (optional)            ║
+// ╚════════════════════════════════════════════════════════════════════╝
+
+const PROJECTS = [
+
+  {
+    id: 'fitness-app',
+    title: 'FITNESS APP UI',
+    category: 'UI/UX DESIGN',
+    year: '2024',
+    duration: '6 weeks',
+    myRole: 'Lead UI/UX Designer — wireframes, prototyping, design system',
+    description: `A health and fitness tracking app designed for daily habit building. The challenge was making data-dense dashboards feel approachable and motivating rather than clinical. I focused on bold typography, clear data visualizations, and a warm color system that energizes without overwhelming.`,
+    tools: ['Figma', 'Principle', 'Adobe Illustrator', 'FigJam'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/6460843d-b117-4a0a-8b29-3592b880bdf2', caption: 'Home dashboard — daily activity overview' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/b0110a5b-1789-4ed5-b71c-53a55ba2b90e', caption: 'Workout tracker screen' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/a3e29159-90b6-4fa8-812c-7b403d7bb411', caption: 'Onboarding flow — goal setting' },
+      // ── ADD YOUR REAL MEDIA BELOW ──
+      // { type: 'video', url: 'https://res.cloudinary.com/YOUR_CLOUD/video/upload/fitness-prototype.mp4', caption: 'Interactive prototype walkthrough' },
+      // { type: 'youtube', url: 'https://www.youtube.com/embed/YOUR_VIDEO_ID', caption: 'Full case study presentation' },
+      // { type: 'pdf', url: 'https://res.cloudinary.com/YOUR_CLOUD/raw/upload/fitness-case-study.pdf', caption: 'Case study document' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Lead Designer', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+      // { name: 'Collaborator Name', role: 'Motion Design', avatar: '🎬', link: 'https://behance.net/...' },
+    ]
+  },
+
+  {
+    id: 'brand-motion',
+    title: 'BRAND MOTION GRAPHICS',
+    category: 'ANIMATION',
+    year: '2024',
+    duration: '3 weeks',
+    myRole: 'Motion Designer & Art Director',
+    description: `A full motion identity package for a tech startup — logo reveals, lower thirds, transition templates, and social media bumpers. Built to be reusable by the client's team inside After Effects with a clean expression-driven rig.`,
+    tools: ['After Effects', 'Illustrator', 'Premiere Pro', 'Lottie'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/2a10df07-ca93-49cb-8d6e-85699c09bb17', caption: 'Logo reveal storyboard' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/5a4be39e-b061-4d95-8e91-08b6f16f774d', caption: 'Lower thirds system' },
+      // { type: 'youtube', url: 'https://www.youtube.com/embed/YOUR_VIDEO_ID', caption: 'Full motion reel' },
+      // { type: 'video', url: 'https://res.cloudinary.com/YOUR_CLOUD/video/upload/brand-motion-reel.mp4', caption: 'Exported reel' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Motion Design & Art Direction', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+    ]
+  },
+
+  {
+    id: 'character-illustrations',
+    title: 'CHARACTER ILLUSTRATIONS',
+    category: 'ILLUSTRATION',
+    year: '2023',
+    duration: '4 weeks',
+    myRole: 'Lead Illustrator — concept, line art, colour & shading',
+    description: `A series of original character designs for a children's educational platform. Each character represents a different learning subject with distinct visual traits that make them immediately recognizable and memorable for young audiences.`,
+    tools: ['Procreate', 'Adobe Illustrator', 'Photoshop'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/b0c729a1-449e-45cd-b912-c8b6b966daa5', caption: 'Main character lineup' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/88649fab-a63a-4132-b02e-52e1fef18e53', caption: 'Expression sheet — protagonist' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/f0fba7cd-0717-41eb-a666-cea529e80008', caption: 'Colour palette exploration' },
+      // { type: 'gif', url: 'https://res.cloudinary.com/YOUR_CLOUD/image/upload/character-animation.gif', caption: 'Idle animation loop' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Lead Illustrator', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+      // { name: 'Collaborator Name', role: 'Concept Writing', avatar: '✍️', link: '' },
+    ]
+  },
+
+  {
+    id: 'platformer-game',
+    title: '2D PLATFORMER GAME',
+    category: 'GAME DEVELOPMENT',
+    year: '2024',
+    duration: '8 weeks',
+    myRole: 'Game Designer & Pixel Artist — level design, character sprites, UI',
+    description: `A hand-crafted 2D platformer built in Unity. I was responsible for all visual assets — character sprites, tile sets, parallax backgrounds — as well as the game UI and overall level feel. The game features 6 unique environments each with their own colour palette and enemy type.`,
+    tools: ['Unity', 'Aseprite', 'Figma', 'Audacity', 'Git'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/60f81544-8354-440a-9ef0-c25ffab4e7bb', caption: 'Level 1 — Forest World' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/49cc3b8c-0819-4e07-8e64-a5294303fe50', caption: 'Character sprite sheet' },
+      // { type: 'youtube', url: 'https://www.youtube.com/embed/YOUR_VIDEO_ID', caption: 'Gameplay trailer' },
+      // { type: 'gif', url: 'https://res.cloudinary.com/YOUR_CLOUD/image/upload/game-run.gif', caption: 'Run animation cycle' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Game Design & Art', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+      // { name: 'Collaborator Name', role: 'Sound Design', avatar: '🎵', link: '' },
+      // { name: 'Collaborator Name', role: 'Programming', avatar: '💻', link: '' },
+    ]
+  },
+
+  {
+    id: 'mobile-app',
+    title: 'MOBILE APP DESIGN',
+    category: 'UI/UX DESIGN',
+    year: '2024',
+    duration: '5 weeks',
+    myRole: 'UX Researcher & UI Designer — user flows, wireframes, high-fidelity screens',
+    description: `A fintech mobile app for peer-to-peer money transfers in the African market. The design prioritises speed of transaction, trust signals, and accessibility for users with varying levels of tech literacy. Tested with real users through 3 rounds of prototype iteration.`,
+    tools: ['Figma', 'Maze', 'FigJam', 'Notion'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/7a0293b1-4ad6-4457-aa7d-dea34359e014', caption: 'Transaction home screen' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/fc274547-1c3a-4003-986c-757e196bd4ba', caption: 'Send money — recipient selection' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/31a85ebb-1ad7-4c4b-b5a0-a350c27fd51f', caption: 'Transaction confirmation screen' },
+      // { type: 'pdf', url: 'https://res.cloudinary.com/YOUR_CLOUD/raw/upload/fintech-case-study.pdf', caption: 'UX Research findings — PDF' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'UX/UI Design Lead', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+    ]
+  },
+
+  {
+    id: 'environment-art',
+    title: 'ENVIRONMENT CONCEPT ART',
+    category: 'ILLUSTRATION',
+    year: '2023',
+    duration: '2 weeks',
+    myRole: 'Concept Artist — environment design, lighting study, colour script',
+    description: `A set of environment concept paintings created as part of a game pre-production package. Each piece establishes the mood, colour palette, and architectural language for a specific in-game zone. Painted entirely in Procreate with a focus on atmospheric perspective and cinematic lighting.`,
+    tools: ['Procreate', 'Photoshop', 'Adobe Color'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/49cc3b8c-0819-4e07-8e64-a5294303fe50', caption: 'Zone 1 — Ancient Ruins, golden hour' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/b0c729a1-449e-45cd-b912-c8b6b966daa5', caption: 'Zone 2 — Crystal Caves, bioluminescent' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/6460843d-b117-4a0a-8b29-3592b880bdf2', caption: 'Zone 3 — Sky City, overcast' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Concept Artist', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+    ]
+  },
+
+  {
+    id: 'logo-motion',
+    title: 'LOGO MOTION REEL',
+    category: 'ANIMATION',
+    year: '2023',
+    duration: '2 weeks',
+    myRole: 'Motion Designer — animation, compositing, sound sync',
+    description: `A curated reel of logo animation work across multiple client brands. Each ident tells the brand story in under 5 seconds through carefully timed motion, easing, and sound design. Deliverables included Lottie JSON files for web use and rendered MP4s for broadcast.`,
+    tools: ['After Effects', 'Illustrator', 'Lottie', 'Audition'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/fc274547-1c3a-4003-986c-757e196bd4ba', caption: 'Brand A — logo reveal frames' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/2a10df07-ca93-49cb-8d6e-85699c09bb17', caption: 'Brand B — motion breakdown' },
+      // { type: 'youtube', url: 'https://www.youtube.com/embed/YOUR_VIDEO_ID', caption: 'Full logo reel' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Motion Design', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+    ]
+  },
+
+  {
+    id: 'design-system',
+    title: 'PRODUCT DESIGN SYSTEM',
+    category: 'UI/UX DESIGN',
+    year: '2024',
+    duration: '10 weeks',
+    myRole: 'Design Systems Lead — component architecture, documentation, token system',
+    description: `A comprehensive design system built for a SaaS product with a team of 4 developers and 2 designers. Covers 200+ components, a colour token system with light/dark mode, typography scale, motion guidelines, and a full Figma library with auto-layout and variant properties.`,
+    tools: ['Figma', 'Storybook', 'Zeroheight', 'VS Code', 'Notion'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/31a85ebb-1ad7-4c4b-b5a0-a350c27fd51f', caption: 'Component library overview' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/88649fab-a63a-4132-b02e-52e1fef18e53', caption: 'Colour token system — light & dark mode' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/b0110a5b-1789-4ed5-b71c-53a55ba2b90e', caption: 'Typography scale & usage guidelines' },
+      // { type: 'pdf', url: 'https://res.cloudinary.com/YOUR_CLOUD/raw/upload/design-system-docs.pdf', caption: 'Design system documentation PDF' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Design Systems Lead', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+      // { name: 'Developer Name', role: 'Storybook Integration', avatar: '💻', link: '' },
+    ]
+  },
+
+  {
+    id: 'game-characters',
+    title: 'HAND-CRAFTED CHARACTERS',
+    category: 'GAME DEVELOPMENT',
+    year: '2024',
+    duration: '5 weeks',
+    myRole: 'Character Designer & Pixel Artist — full production from sketch to game-ready sprite',
+    description: `A full roster of 12 playable characters for an indie RPG. Each character went through concept sketch, line art, pixel art conversion, animation (idle, walk, attack, death), and final in-engine integration. The visual style blends modern illustration with classic JRPG aesthetic.`,
+    tools: ['Aseprite', 'Procreate', 'Unity', 'Photoshop'],
+    gallery: [
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/f0fba7cd-0717-41eb-a666-cea529e80008', caption: 'Full character roster' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/60f81544-8354-440a-9ef0-c25ffab4e7bb', caption: 'Warrior class — animation frames' },
+      { type: 'image', url: 'https://www.figma.com/api/mcp/asset/5a4be39e-b061-4d95-8e91-08b6f16f774d', caption: 'Mage class — concept to final sprite' },
+      // { type: 'gif', url: 'https://res.cloudinary.com/YOUR_CLOUD/image/upload/warrior-idle.gif', caption: 'Warrior idle animation loop' },
+    ],
+    credits: [
+      { name: 'Mayamba Maxwell', role: 'Character Design & Pixel Art', avatar: '👤', link: 'https://www.behance.net/mayambamaxwell' },
+      // { name: 'Game Dev Name', role: 'Unity Integration', avatar: '🎮', link: '' },
+    ]
+  },
+
+];
+
+// ═══════════════════════════════════════════════════════
+//  RENDER ENGINE
+// ═══════════════════════════════════════════════════════
+const projectIds = PROJECTS.map(p => p.id);
+const id         = new URLSearchParams(window.location.search).get('id');
+const idx        = projectIds.indexOf(id);
+const project    = PROJECTS[idx];
+
+if (!project) {
+  // Not found
+  document.getElementById('pageContent').innerHTML = `
+    <div class="not-found">
+      <h2>PROJECT NOT FOUND</h2>
+      <p>This project doesn't exist or the link is broken.</p>
+      <br/><a href="portfolio.html">← Back to Portfolio</a>
+    </div>`;
+} else {
+
+  document.title = project.title + ' | Mayamba Maxwell';
+
+  // ── Build gallery HTML ──
+  let currentMedia = 0;
+
+  function mediaViewerHTML(item, i) {
+    const active = i === 0 ? 'style="display:flex"' : 'style="display:none"';
+    if (item.type === 'image' || item.type === 'gif') {
+      return `<div class="media-slide" data-idx="${i}" ${active}><img src="${item.url}" alt="${item.caption||''}" loading="lazy"/></div>`;
+    }
+    if (item.type === 'video') {
+      return `<div class="media-slide" data-idx="${i}" ${active}><video src="${item.url}" controls preload="metadata" poster=""></video></div>`;
+    }
+    if (item.type === 'youtube') {
+      return `<div class="media-slide" data-idx="${i}" ${active}><iframe class="pdf-frame" src="${item.url}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+    }
+    if (item.type === 'pdf') {
+      return `<div class="media-slide" data-idx="${i}" ${active}><iframe class="pdf-frame" src="${item.url}"></iframe></div>`;
+    }
+    return '';
+  }
+
+  function thumbHTML(item, i) {
+    const icons = { image:'🖼', video:'🎬', youtube:'▶', gif:'🎞', pdf:'📄' };
+    const typeLabel = item.type.toUpperCase();
+    if (item.type === 'image' || item.type === 'gif') {
+      return `<div class="thumb${i===0?' active':''}" data-idx="${i}"><img src="${item.url}" alt=""/><span class="thumb-type">${typeLabel}</span></div>`;
+    }
+    return `<div class="thumb${i===0?' active':''}" data-idx="${i}"><span class="thumb-icon">${icons[item.type]||'📁'}</span><span class="thumb-type">${typeLabel}</span></div>`;
+  }
+
+  // ── Tools ──
+  const toolsHTML = project.tools.map(t => `<span class="tool-tag">${t}</span>`).join('');
+
+  // ── Credits ──
+  const creditsHTML = project.credits.map(c => `
+    <div class="credit-item">
+      <div class="credit-avatar">${c.avatar && c.avatar.startsWith('http') ? `<img src="${c.avatar}" alt="${c.name}"/>` : c.avatar}</div>
+      <div class="credit-info">
+        <div class="credit-name">${c.name}</div>
+        <div class="credit-role">${c.role}</div>
+        ${c.link ? `<a class="credit-link" href="${c.link}" target="_blank">${c.link.replace('https://','')}</a>` : ''}
+      </div>
+    </div>`).join('');
+
+  // ── Prev / Next ──
+  const prevProject = idx > 0 ? PROJECTS[idx - 1] : null;
+  const nextProject = idx < PROJECTS.length - 1 ? PROJECTS[idx + 1] : null;
+  const prevHTML = prevProject
+    ? `<a class="proj-nav-btn prev-btn" href="project.html?id=${prevProject.id}"><div class="proj-nav-label">PREVIOUS PROJECT</div><div class="proj-nav-title">${prevProject.title}</div></a>`
+    : `<div></div>`;
+  const nextHTML = nextProject
+    ? `<a class="proj-nav-btn next-btn" href="project.html?id=${nextProject.id}"><div class="proj-nav-label">NEXT PROJECT</div><div class="proj-nav-title">${nextProject.title}</div></a>`
+    : `<div></div>`;
+
+  // ── Inject everything ──
+  document.getElementById('pageContent').innerHTML = `
+    <div class="breadcrumb">
+      <a href="portfolio.html">PORTFOLIO</a>
+      <span>/</span>
+      <span>${project.category}</span>
+      <span>/</span>
+      <span>${project.title}</span>
+    </div>
+
+    <div class="project-header">
+      <div class="project-cat">${project.category}</div>
+      <h1 class="project-title">${project.title}</h1>
+      <div class="project-meta">
+        <div class="meta-pill">YEAR <span>${project.year}</span></div>
+        <div class="meta-pill">DURATION <span>${project.duration}</span></div>
+        <div class="meta-pill">ROLE <span>${project.myRole.split('—')[0].trim()}</span></div>
+      </div>
+    </div>
+
+    <div class="project-body">
+
+      <!-- GALLERY -->
+      <div class="gallery-col">
+        <div class="gallery-main" id="galleryMain">
+          ${project.gallery.map((item, i) => mediaViewerHTML(item, i)).join('')}
+          ${project.gallery.length > 1 ? `
+            <button class="gallery-arrow prev" id="galleryPrev">&#8592;</button>
+            <button class="gallery-arrow next" id="galleryNext">&#8594;</button>
+            <div class="gallery-counter"><span id="galleryCur">1</span> / ${project.gallery.length}</div>
+          ` : ''}
+        </div>
+        ${project.gallery.length > 1 ? `
+          <div class="gallery-thumbs" id="galleryThumbs">
+            ${project.gallery.map((item, i) => thumbHTML(item, i)).join('')}
+          </div>
+        ` : ''}
+        ${project.gallery[0]?.caption ? `<p style="font-size:13px;color:var(--muted);margin-top:10px;letter-spacing:.5px" id="galleryCaption">${project.gallery[0].caption}</p>` : ''}
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="sidebar-col">
+
+        <div class="sidebar-card">
+          <h3>ABOUT THIS PROJECT</h3>
+          <p class="project-desc">${project.description}</p>
+          <p class="project-role"><strong>MY ROLE:</strong> ${project.myRole}</p>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>TOOLS & TECH</h3>
+          <div class="tools-grid">${toolsHTML}</div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>CREDITS</h3>
+          ${creditsHTML}
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PREV / NEXT NAV -->
+    <div class="project-nav">
+      ${prevHTML}
+      ${nextHTML}
+    </div>
+  `;
+
+  // ── Gallery interactivity ──
+  if (project.gallery.length > 1) {
+    const slides   = document.querySelectorAll('.media-slide');
+    const thumbs   = document.querySelectorAll('.thumb');
+    const caption  = document.getElementById('galleryCaption');
+    const curLabel = document.getElementById('galleryCur');
+
+    function goTo(n) {
+      slides[currentMedia].style.display = 'none';
+      thumbs[currentMedia].classList.remove('active');
+      currentMedia = (n + slides.length) % slides.length;
+      slides[currentMedia].style.display = 'flex';
+      thumbs[currentMedia].classList.add('active');
+      thumbs[currentMedia].scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+      if (curLabel) curLabel.textContent = currentMedia + 1;
+      if (caption)  caption.textContent  = project.gallery[currentMedia].caption || '';
+    }
+
+    document.getElementById('galleryPrev').addEventListener('click', () => goTo(currentMedia - 1));
+    document.getElementById('galleryNext').addEventListener('click', () => goTo(currentMedia + 1));
+    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => goTo(i)));
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  goTo(currentMedia - 1);
+      if (e.key === 'ArrowRight') goTo(currentMedia + 1);
+    });
+  }
+}
+</script>
+</body>
+</html>

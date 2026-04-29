@@ -96,7 +96,7 @@
     .hero-socials { display: flex; gap: 20px; animation: fadeInUp 0.7s 0.45s ease both; }
     .hero-socials a { color: var(--muted); transition: color 0.2s, transform 0.2s; display: flex; align-items: center; }
     .hero-socials a:hover { color: var(--green); transform: translateY(-2px); }
-    .hero-image { position: absolute; right: 0; bottom: 0; width: 580px; z-index: 1; pointer-events: none; }
+    .hero-image { position: absolute; right: 0; bottom: 0; width: 680px; z-index: 1; pointer-events: none; }
     .hero-image img { width: 100%; display: block; }
 
     /* ─── SECTIONS ─── */
@@ -203,7 +203,7 @@
       header { padding: 0 40px; }
       section, #portfolio, #shop, #contact, #support, footer { padding: 60px 40px; }
       .shop-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-image { width: 360px; }
+      .hero-image { width: 480px; }
     }
     @media (max-width: 768px) {
       header { padding: 0 20px; }
@@ -212,6 +212,6 @@
       #hero { padding: 24px 20px; padding-top: 110px; }
       .portfolio-grid, .shop-grid { grid-template-columns: 1fr; }
       .contact-inner { grid-template-columns: 1fr; }
-      .hero-image { display: none; }
+      .hero-image { display: block; position: relative; width: 100%; max-width: 400px; margin: 40px auto 0; }
       .hero-content h1 { font-size: 44px; }
     }
